@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+# Every push to main redeploys with no manual step. Pull requests run the same
+# build and checks but never deploy, so a broken change is caught before merge.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege: the build needs nothing special; the deploy needs to write
+# Pages and mint the OIDC token deploy-pages verifies.
+permissions:
+  contents: read
+
+concurrency:
+  # One live deploy at a time; let an in-flight one finish rather than cancel it
+  # (cancelling a Pages deploy can leave it half-applied).
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Derives base_path and origin from the repo's Pages settings, so the URL
+      # config has a single source of truth and survives a rename or a future
+      # custom domain with no edits here. Requires Pages source = GitHub Actions.
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - run: npm ci
+
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+
+      - name: Build static export
+        run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
+          # Stays out of search indexes until the deliberate public launch.
+          # Flip to 'true' here (or via a repo variable) when the course ships.
+          NEXT_PUBLIC_INDEXABLE: 'false'
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    # Only main deploys; PR builds validate and stop.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
