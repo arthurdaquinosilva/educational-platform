@@ -7,12 +7,51 @@
   Lightweight ADR style. See FRAMEWORK.md → Cross-cutting principles.
 -->
 
-## YYYY-MM-DD — <!-- short title of the decision -->
+## 2026-07-14 — Feedback signal: analytics + GitHub errata, not an email
 
-- **Context.** <!-- what situation forced a decision -->
-- **Decision.** <!-- what we chose -->
-- **Why.** <!-- the reasoning, and the main alternative we rejected -->
-- **Consequences.** <!-- what this makes easier, harder, or locks us into -->
+- **Context.** The product deliberately has no accounts, no comments, no
+  community and no 1:1 support. That left it with **zero feedback signal** — and
+  the framework's Phase 11 (Iterate) has nothing to iterate on without one. The
+  author proposed publishing a feedback email address.
+- **Decision.** Ship **cookieless, free, privacy-respecting analytics** (page
+  views per lesson, drop-off) **plus a per-lesson "found an error?" GitHub issue
+  link**. **No feedback email.**
+- **Why.** Email and analytics measure different things, and email is the weaker
+  instrument: it yields sparse, self-selected opinions from the delighted and the
+  furious, and tells you nothing about the silent majority who quietly abandon a
+  course at lesson 3. Worse, an inbox recreates exactly the **support obligation
+  the author explicitly set out to avoid** ("let people enjoy it without getting
+  in touch with me"). The GitHub errata link captures the highest-value feedback
+  for a technical book (wrong code examples) with **zero inbox and zero reply
+  obligation**, and lets readers fix content via pull request — at $0.
+- **Consequences.** We get behavioural data (quantitative) and errata
+  (qualitative) without a support burden. Adds one third-party script (must stay
+  cookieless so no consent banner is needed, and must remain free). Feedback is
+  limited to readers willing to use GitHub — an acceptable filter for a
+  programming-course audience. Revisit if donations ever fund a real backend.
+
+---
+
+## 2026-07-14 — Search: one index with a course field, scoped by default
+
+- **Context.** Search is deferred out of the MVP, but the **content schema must
+  support it now** or we'd pay a migration later. Question raised: should search
+  be scoped per course or global?
+- **Decision.** **One index carrying a `course` field**, so scoping is a *filter*
+  rather than a separate index. Search **defaults to the current course** while
+  reading ("find in this book"), with a "search all courses" escape hatch; from
+  the home page it searches globally. Physically: a **per-course full-text index
+  loaded lazily** on entering a course, plus a **lightweight global index**
+  (titles + headings only).
+- **Why.** Scoping is free once the index carries course metadata, so there is no
+  reason to choose one behaviour. The split into per-course and global indexes is
+  driven by **payload, not features**: a full-text index across 17 large courses
+  is multiple MB, and the primary audience reads on phones on Brazilian mobile
+  connections. Shipping megabytes of index to read a book is the wrong trade.
+- **Consequences.** The content schema must carry course/lesson/heading metadata
+  from day one. Cross-course search finds titles and headings but not arbitrary
+  body text — an accepted limitation, revisitable if the library grows and users
+  need deeper global search.
 
 ---
 

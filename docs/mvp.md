@@ -44,6 +44,15 @@ Each item below is here because **the product fails without it**.
    undeployed site solves nobody's problem.
 9. **Donation link (incl. Pix) in the footer.** It is the entire sustainability
    model and costs one link to add.
+10. **Cookieless, free analytics.** The *only* behavioural feedback signal the
+    product has. Without it we ship blind and Phase 11 (Iterate) has nothing to
+    iterate on — we'd never learn that readers bail at lesson 3. Must be free,
+    cookieless, and privacy-respecting (no consent banner, no personal data).
+11. **"Found an error?" link on every lesson**, pointing at a GitHub issue for
+    that page. Errata are the highest-value feedback for a technical book, and
+    this collects them with **zero inbox and zero reply obligation** — readers
+    can even fix content via pull request. Deliberately **not** an email address:
+    an inbox would create exactly the support burden the author ruled out.
 
 ## Deferred (not now, not never)
 
@@ -57,6 +66,16 @@ Each item below is here because **the product fails without it**.
 - **Client-side full-text search.** Real work (index generation) for little value
   across a *single* course. Its value grows with the course count; ship it when
   the library is big enough to need it.
+
+  _Design already settled, so the content schema supports it from day one:_ one
+  index carrying a `course` field, so **scoping is a filter, not a separate
+  index**. While reading a course, search defaults to **that course** ("find in
+  this book") with a "search all courses" escape hatch; from the home page it
+  searches globally. Payload matters more than features here — a full-text index
+  over 17 courses is multiple MB, which is the wrong thing to push to a phone on
+  a slow connection. So: a **per-course full-text index loaded lazily** when you
+  enter a course, plus a **lightweight global index** (lesson titles + headings
+  only) for cross-course discovery.
 - **The "Zero to Hired" guided path UI.** A guided path across one course is
   meaningless. Ships when there are enough courses to sequence.
 - **Language-switcher UI + geo-detection (Brazil → PT-BR).** Nothing to switch
@@ -96,12 +115,14 @@ Concrete and checkable — these become the Phase 8 test targets.
 - **RISK — discovery.** With no marketing, no community, and no contact by
   deliberate choice, organic search is the *only* acquisition channel. Weak SEO
   means the product effectively does not exist. This is why SEO is in the MVP.
-- **RISK — we are building Phase 11 (Iterate) blind.** No accounts, no contact,
-  no comments means **zero feedback signal**. The framework's iterate phase needs
-  input, and we'd have none. *Open question for the author:* add a
-  privacy-respecting, free, cookieless analytics (e.g. page views per lesson,
-  drop-off) so we can learn what's working? It conflicts with nothing in scope,
-  but it *is* a new dependency and a privacy decision. **Needs a decision.**
+- **RESOLVED — the feedback signal.** No accounts, no contact and no comments
+  would have shipped the product blind, leaving Phase 11 (Iterate) with nothing
+  to iterate on. Settled: **cookieless analytics** (quantitative: where readers
+  arrive and where they drop off) **+ a per-lesson GitHub errata link**
+  (qualitative: "this example is wrong"). A **feedback email was considered and
+  rejected** — it collects only sparse, self-selected opinions, tells you nothing
+  about the silent majority who quietly leave, and creates precisely the inbox
+  and support obligation the author set out to avoid.
 - **RISK — GitHub Pages soft limits** (~1 GB repo, ~100 GB/month bandwidth). Text
   content is small, so this is unlikely to bind soon, but heavy images/traffic
   could. Worth watching, not worth solving now.
