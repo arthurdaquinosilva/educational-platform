@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Production / generated
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment
+.env
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# The Product Development Framework is a separate, independently published repo
+# (github.com/arthurdaquinosilva/product-development-framework-with-ai) that
+# lives here only as a local reference. Its artifacts were scaffolded into docs/
+# via pdev-init; the framework source itself is not part of this project.
+product-development-framework-with-ai/
