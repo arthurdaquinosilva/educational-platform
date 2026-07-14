@@ -19,11 +19,11 @@
 
 ## Coverage by level
 
-| Level | What it covers here | Priority |
-|-------|---------------------|----------|
-| Unit | <!-- logic, edge cases --> | |
-| Integration | <!-- components working together --> | |
-| End-to-end | <!-- critical flows above --> | |
+| Level       | What it covers here                  | Priority |
+| ----------- | ------------------------------------ | -------- |
+| Unit        | <!-- logic, edge cases -->           |          |
+| Integration | <!-- components working together --> |          |
+| End-to-end  | <!-- critical flows above -->        |          |
 
 ## MVP success criteria → tests
 
@@ -31,8 +31,8 @@
      A criterion with no test is a gap — fill it or document why not. -->
 
 | Success criterion (from mvp.md) | Covered by |
-|---------------------------------|-----------|
-| | |
+| ------------------------------- | ---------- |
+|                                 |            |
 
 ## Deliberately not tested
 

@@ -9,8 +9,8 @@
 
 ## 2026-07-14 — URL structure: locale always in the path, module never in it
 
-- **Context.** `tech-stack.md` flagged URL and locale routing as *"the most
-  dangerous item on this list"*: SEO is the only acquisition channel, and
+- **Context.** `tech-stack.md` flagged URL and locale routing as _"the most
+  dangerous item on this list"_: SEO is the only acquisition channel, and
   changing URLs later forfeits accumulated ranking. It had to be settled before
   any code was written.
 - **Decision.** `/{locale}/{course}/{lesson}/` — e.g.
@@ -47,7 +47,7 @@
 - **Why.** Order lives in exactly one place — the filename — so it can't drift
   out of sync with a hand-maintained list, and the file tree reads in reading
   order. Grouping lives in frontmatter because it's metadata, not sequence. A
-  malformed lesson failing the *build* (rather than shipping a broken page) is
+  malformed lesson failing the _build_ (rather than shipping a broken page) is
   the whole point of validating with Zod.
 - **Consequences.** Re-ordering lessons means renaming files — which changes
   slugs, which breaks URLs (see above), so the numeric prefix is deliberately
@@ -87,7 +87,7 @@
 - **Context.** Search is deferred out of the MVP, but the **content schema must
   support it now** or we'd pay a migration later. Question raised: should search
   be scoped per course or global?
-- **Decision.** **One index carrying a `course` field**, so scoping is a *filter*
+- **Decision.** **One index carrying a `course` field**, so scoping is a _filter_
   rather than a separate index. Search **defaults to the current course** while
   reading ("find in this book"), with a "search all courses" escape hatch; from
   the home page it searches globally. Physically: a **per-course full-text index

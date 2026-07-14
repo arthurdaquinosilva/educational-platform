@@ -23,8 +23,8 @@
      injected. Never commit actual secret values — list the names only. -->
 
 | Variable | Purpose | Where it's set |
-|----------|---------|----------------|
-| | | |
+| -------- | ------- | -------------- |
+|          |         |                |
 
 ## Health checks
 

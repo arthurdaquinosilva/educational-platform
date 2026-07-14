@@ -1,0 +1,12 @@
+# Build output — generated, never hand-edited.
+.next/
+out/
+node_modules/
+
+# Legacy course sites: the migration *source*, kept byte-for-byte as scraped.
+# Reformatting them would corrupt the input the D.1 converter reads, and some
+# are not even valid HTML (unterminated tags), which makes Prettier error out.
+websites/
+
+# Lockfile — owned by npm.
+package-lock.json

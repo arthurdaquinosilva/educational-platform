@@ -5,7 +5,7 @@ Read this first, on any task.
 ## Project overview
 
 A **free, bilingual, static "online book"** of programming courses — content you
-*read* to learn, with copy-paste examples you run on your own machine. Not an
+_read_ to learn, with copy-paste examples you run on your own machine. Not an
 interactive or gamified platform: no accounts, no in-browser code execution, no
 certificates. The primary audience is **Brazilian beginners reading on phones**,
 so it ships in pt-BR first and the payload budget is a feature, not a nicety.
@@ -34,7 +34,7 @@ npm run format      # prettier --write .
 
 - **TypeScript, strict.** `@/*` maps to `src/*`.
 - **Content is data, code is presentation.** Publishing a lesson must mean
-  adding *one Markdown file* and touching **zero** components. If a content
+  adding _one Markdown file_ and touching **zero** components. If a content
   change needs a code change, the abstraction is wrong.
 - **CSS is hand-written: BEM + custom properties**, global stylesheets. No CSS
   framework, no CSS Modules (they would fight BEM's manual scoping), no
@@ -43,9 +43,9 @@ npm run format      # prettier --write .
   highlighting happens at build time. The copy-to-clipboard button is the only
   client component the MVP is allowed.
 - **Commits are atomic** — one task, one focused diff, one commit. The commit
-  history is the author's review surface, so the message must explain the *why*,
+  history is the author's review surface, so the message must explain the _why_,
   not restate the diff. **No `Co-Authored-By` trailers.**
-- Comments explain *why*, never *what*.
+- Comments explain _why_, never _what_.
 
 ## Guardrails
 

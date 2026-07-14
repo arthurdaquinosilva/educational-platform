@@ -19,32 +19,32 @@ Each item below is here because **the product fails without it**.
    of the whole product: without it we're back to unmaintainable hand-written
    HTML, which is the problem we're solving.
 2. **One complete course: `01 — Programming Foundations` (Python), rewritten and
-   authored in PT-BR.** Content *is* the product; a platform with no course
+   authored in PT-BR.** Content _is_ the product; a platform with no course
    teaches nobody. Foundations is chosen because it is the entry point of the
    "Zero to Hired" path and speaks to exactly our primary user: the absolute
    beginner. (18 sections.)
 3. **Reading navigation.** Home/course listing → course table of contents →
    lesson page, with prev/next. Without navigation, a multi-lesson course is
    unreadable.
-4. **Code blocks with syntax highlighting and a copy button.** Copy-paste *is*
+4. **Code blocks with syntax highlighting and a copy button.** Copy-paste _is_
    the practice mechanism — it's how learners get the examples onto their own
    machine. This is the one interaction the product cannot do without.
 5. **Responsive reading experience.** The primary audience is Brazilian, and
    that audience reads on phones. A desktop-only book fails most of its readers.
 6. **i18n-ready architecture** (locale in the content structure and routing),
-   **shipping `pt-BR` only.** The *architecture* is MVP because retrofitting
-   locales later is a painful rewrite; the *language-switcher UI* is not (see
+   **shipping `pt-BR` only.** The _architecture_ is MVP because retrofitting
+   locales later is a painful rewrite; the _language-switcher UI_ is not (see
    Deferred — there is nothing to switch to yet).
 7. **Basic SEO / discoverability.** Unique titles + meta descriptions, semantic
    HTML, `sitemap.xml`, Open Graph tags. The author explicitly wants **no
    community, no marketing, and no 1:1 contact** — which makes organic search
-   the *only* channel through which a user will ever find this. Free content
+   the _only_ channel through which a user will ever find this. Free content
    nobody can find is not a product.
 8. **Live on GitHub Pages at $0.** "Free forever" is a core principle; an
    undeployed site solves nobody's problem.
 9. **Donation link (incl. Pix) in the footer.** It is the entire sustainability
    model and costs one link to add.
-10. **Cookieless, free analytics.** The *only* behavioural feedback signal the
+10. **Cookieless, free analytics.** The _only_ behavioural feedback signal the
     product has. Without it we ship blind and Phase 11 (Iterate) has nothing to
     iterate on — we'd never learn that readers bail at lesson 3. Must be free,
     cookieless, and privacy-respecting (no consent banner, no personal data).
@@ -56,15 +56,15 @@ Each item below is here because **the product fails without it**.
 
 ## Deferred (not now, not never)
 
-- **The other 16 courses.** Once the pipeline exists, each new course is *just
-  content* — additive, no code. Blocking launch on rewriting and translating all
+- **The other 16 courses.** Once the pipeline exists, each new course is _just
+  content_ — additive, no code. Blocking launch on rewriting and translating all
   17 courses solo would delay it by many months for zero extra proof.
 - **Progress tracking** (mark-complete / continue-where-you-left-off). The
   closest call on this list: it's cheap and users will want it. But a reader can
   read a book without it — the core problem is still solved. **First candidate
   to add right after the MVP ships.**
 - **Client-side full-text search.** Real work (index generation) for little value
-  across a *single* course. Its value grows with the course count; ship it when
+  across a _single_ course. Its value grows with the course count; ship it when
   the library is big enough to need it.
 
   _Design already settled, so the content schema supports it from day one:_ one
@@ -76,10 +76,11 @@ Each item below is here because **the product fails without it**.
   a slow connection. So: a **per-course full-text index loaded lazily** when you
   enter a course, plus a **lightweight global index** (lesson titles + headings
   only) for cross-course discovery.
+
 - **The "Zero to Hired" guided path UI.** A guided path across one course is
   meaningless. Ships when there are enough courses to sequence.
 - **Language-switcher UI + geo-detection (Brazil → PT-BR).** Nothing to switch
-  to until English content exists. The *architecture* supports it from day one.
+  to until English content exists. The _architecture_ supports it from day one.
 - **English content.**
 - Already out of scope entirely (see `project-scope.md`): accounts/sync,
   in-browser code execution, certificates, gamification, mobile apps,
@@ -107,13 +108,13 @@ Concrete and checkable — these become the Phase 8 test targets.
 ## Assumptions & risks
 
 - **RISK — content workload is the real bottleneck, not the code.** Rewriting and
-  translating 17 courses solo dwarfs the engineering effort. *Mitigation:* the
+  translating 17 courses solo dwarfs the engineering effort. _Mitigation:_ the
   pipeline makes courses purely additive, and the MVP ships one course.
 - **RISK — converting the legacy HTML is messy.** The 17 existing files are large
   monolithic HTML with inline styles/scripts. Extracting clean Markdown will need
   a semi-automated conversion plus a manual polish pass, and may be lossy.
 - **RISK — discovery.** With no marketing, no community, and no contact by
-  deliberate choice, organic search is the *only* acquisition channel. Weak SEO
+  deliberate choice, organic search is the _only_ acquisition channel. Weak SEO
   means the product effectively does not exist. This is why SEO is in the MVP.
 - **RESOLVED — the feedback signal.** No accounts, no contact and no comments
   would have shipped the product blind, leaving Phase 11 (Iterate) with nothing

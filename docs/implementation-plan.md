@@ -65,39 +65,44 @@ The goal is a deployable site rendering one real lesson from one real Markdown
 file as early as possible. Everything after that is widening, not proving.
 
 ### A.1 — Scaffold the Next.js app
+
 - [ ] **Task.** Next.js (App Router, TypeScript, `output: 'export'`), ESLint +
-  Prettier, Vitest, `.gitignore`, `npm run dev` serving a placeholder page.
-  Fill in `AGENTS.md` and replace the framework-guide `CLAUDE.md` with
-  project context.
+      Prettier, Vitest, `.gitignore`, `npm run dev` serving a placeholder page.
+      Fill in `AGENTS.md` and replace the framework-guide `CLAUDE.md` with
+      project context.
 - **Depends on:** none
 - **Done when:** `npm run dev` serves a page; `npm run lint`, `npm run test` and
   `npm run build` all pass on a clean checkout.
 
 ### A.2 — Content schema + loader
+
 - [ ] **Task.** Zod schemas for course/module/lesson frontmatter; a loader that
-  reads `content/`, validates it, derives slugs and reading order, and throws a
-  readable error on malformed content. Unit-tested against fixtures.
+      reads `content/`, validates it, derives slugs and reading order, and throws a
+      readable error on malformed content. Unit-tested against fixtures.
 - **Depends on:** A.1
 - **Done when:** `npm run test` proves a good course parses and each malformed
   case (missing title, unknown module, duplicate order) fails loudly.
 
 ### A.3 — Markdown → HTML pipeline
+
 - [ ] **Task.** unified/remark/rehype: GFM, `remark-directive` callouts, heading
-  slugs + anchors, and Shiki syntax highlighting at build time (zero client JS).
+      slugs + anchors, and Shiki syntax highlighting at build time (zero client JS).
 - **Depends on:** A.2
 - **Done when:** a fixture lesson with a callout and a Python code block renders
   to highlighted, anchored HTML in a unit test.
 
 ### A.4 — Routes and the reading page
+
 - [ ] **Task.** `/[locale]/[course]/[lesson]` plus `generateStaticParams`;
-  minimal lesson layout with prev/next. Static, unstyled but correct.
+      minimal lesson layout with prev/next. Static, unstyled but correct.
 - **Depends on:** A.3
 - **Done when:** `npm run build` emits static HTML for a real lesson and
   prev/next walks the whole course.
 
 ### A.5 — Deploy to GitHub Pages
+
 - [ ] **Task.** GitHub Actions workflow: install → lint → test → build → deploy.
-  `basePath` handled so assets resolve on Pages. Draft `deployment.md`.
+      `basePath` handled so assets resolve on Pages. Draft `deployment.md`.
 - **Depends on:** A.4
 - **Done when:** the walking skeleton is reachable at its public URL and a push
   to `main` redeploys it with no manual steps.
@@ -107,29 +112,33 @@ file as early as possible. Everything after that is widening, not proving.
 ## Phase B: The reading experience
 
 ### B.1 — Design tokens + base stylesheet
+
 - [ ] **Task.** CSS custom properties (colour, type scale, spacing), a
-  readable-measure prose layout, dark mode via `prefers-color-scheme`. BEM,
-  hand-written, global stylesheets.
+      readable-measure prose layout, dark mode via `prefers-color-scheme`. BEM,
+      hand-written, global stylesheets.
 - **Depends on:** A.4
 - **Done when:** a lesson is comfortable to read on a 360px phone and a desktop.
 
 ### B.2 — Site chrome: header, footer, course ToC
+
 - [ ] **Task.** Header, footer (with the donation link), course table of contents
-  grouped by module, and an in-page "on this page" list from the lesson's `h2`s.
+      grouped by module, and an in-page "on this page" list from the lesson's `h2`s.
 - **Depends on:** B.1
 - **Done when:** you can navigate home → course → lesson → next lesson entirely
   by clicking, on mobile and desktop.
 
 ### B.3 — Code blocks: copy button
+
 - [ ] **Task.** A copy-to-clipboard button on every code block. The one piece of
-  client JS the MVP genuinely needs — progressively enhanced, tiny.
+      client JS the MVP genuinely needs — progressively enhanced, tiny.
 - **Depends on:** B.1
 - **Done when:** one tap copies the exact source (no line numbers, no prompts)
   on a phone; the page still renders and reads fine with JS disabled.
 
 ### B.4 — Home page (the shelf)
+
 - [ ] **Task.** Course listing with the "Zero to Hired" ordering visible as
-  suggested reading order — a list, not a guided-path UI (that's deferred).
+      suggested reading order — a list, not a guided-path UI (that's deferred).
 - **Depends on:** B.2
 - **Done when:** the home page lists the shipped course and links into it.
 
@@ -138,22 +147,25 @@ file as early as possible. Everything after that is widening, not proving.
 ## Phase C: Make it findable and sustainable
 
 ### C.1 — SEO
+
 - [ ] **Task.** Per-page `<title>`/meta description from frontmatter, Open Graph,
-  canonical URLs, `hreflang` (ready for English), `sitemap.xml`, `robots.txt`,
-  and JSON-LD `Course` structured data.
+      canonical URLs, `hreflang` (ready for English), `sitemap.xml`, `robots.txt`,
+      and JSON-LD `Course` structured data.
 - **Depends on:** B.4
 - **Done when:** every emitted page has a unique title and description and
   appears in `sitemap.xml`; a build-time check enforces it.
 
 ### C.2 — Analytics + errata link
+
 - [ ] **Task.** Cloudflare Web Analytics (cookieless, no consent banner) and a
-  per-lesson "encontrou um erro?" link that opens a pre-filled GitHub issue for
-  that exact lesson.
+      per-lesson "encontrou um erro?" link that opens a pre-filled GitHub issue for
+      that exact lesson.
 - **Depends on:** B.2
 - **Done when:** the errata link lands on a GitHub issue naming the lesson; the
   analytics beacon is present and sets no cookies.
 
 ### C.3 — Donation link
+
 - [ ] **Task.** Footer donation link, including Pix.
 - **Depends on:** B.2
 - **Done when:** it's live. **BLOCKED on the author's Pix key** — until then it
@@ -164,36 +176,40 @@ file as early as possible. Everything after that is widening, not proving.
 ## Phase D: The content migration
 
 ### D.1 — Legacy HTML → Markdown converter
+
 - [ ] **Task.** A one-shot script (`scripts/`, not shipped) converting
-  `websites/foundations_mastery.html` into lesson Markdown: headings, prose,
-  lists, blockquotes → callouts, `<details>Solution` → `:::solucao`, and
-  Pygments-highlighted `<pre>` back to plain fenced code with an inferred
-  language.
+      `websites/foundations_mastery.html` into lesson Markdown: headings, prose,
+      lists, blockquotes → callouts, `<details>Solution` → `:::solucao`, and
+      Pygments-highlighted `<pre>` back to plain fenced code with an inferred
+      language.
 - **Depends on:** A.2
 - **Done when:** all 18 chapters emit schema-valid Markdown that the loader
   accepts, with no HTML tags left in the body.
 
 ### D.2 — Translate & polish, chapter by chapter
+
 - [ ] **Task.** Translate each chapter to pt-BR and fix what the converter got
-  wrong (fence languages, ASCII diagrams, exercise formatting). **One chapter,
-  one commit** — this is content work, and it is the real bottleneck.
+      wrong (fence languages, ASCII diagrams, exercise formatting). **One chapter,
+      one commit** — this is content work, and it is the real bottleneck.
 - **Depends on:** D.1, B.3
-- **Done when:** *Fundamentos de Programação* reads end to end in Portuguese.
+- **Done when:** _Fundamentos de Programação_ reads end to end in Portuguese.
 
 ---
 
 ## Phase E: Verify & harden
 
 ### E.1 — Test plan + suite
+
 - [ ] **Task.** `test-plan.md`; Vitest for the schema/loader/pipeline; one
-  Playwright pass over the critical flow (home → course → lesson → copy code).
+      Playwright pass over the critical flow (home → course → lesson → copy code).
 - **Depends on:** D.2
 - **Done when:** every MVP success criterion has a test or a documented reason
   it has none; the suite passes in CI.
 
 ### E.2 — Pre-launch review
+
 - [ ] **Task.** Framework Phase 9: security, edge cases, error handling, docs.
-  Lighthouse mobile ≥ 90. README that lets a stranger clone and run it.
+      Lighthouse mobile ≥ 90. README that lets a stranger clone and run it.
 - **Depends on:** E.1
 - **Done when:** no blockers outstanding; Lighthouse mobile performance ≥ 90.
 
@@ -204,7 +220,7 @@ file as early as possible. Everything after that is widening, not proving.
 <!-- When the build reveals the plan was wrong, note what changed and why here,
      and split or re-order tasks above. Cross-reference decisions.md. -->
 
-- **2026-07-14 — the legacy HTML is machine-generated *from* Markdown.** Its
+- **2026-07-14 — the legacy HTML is machine-generated _from_ Markdown.** Its
   blockquotes, `<details>` solutions, slugged headings and Pygments blocks are
   all artefacts of a Markdown→HTML pipeline. The migration (D.1) is therefore a
   mechanical reversal, not the lossy scrape `mvp.md` feared — the risk moves
