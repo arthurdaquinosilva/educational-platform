@@ -11,6 +11,14 @@ export const site = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? '',
   /** Where the "found an error?" links file their issues. */
   repo: 'arthurdaquinosilva/educational-platform',
+  /**
+   * Off by default: the pipeline deploys continuously, but the site stays
+   * `noindex` until the first course is actually ready to launch. Search is the
+   * only acquisition channel and lesson slugs freeze the moment Google crawls
+   * them, so we do not let it index a thin, unstyled work-in-progress. Flip to
+   * `true` (via NEXT_PUBLIC_INDEXABLE) only at the deliberate public launch.
+   */
+  indexable: process.env.NEXT_PUBLIC_INDEXABLE === 'true',
 } as const;
 
 /** Absolute URL for a site-root-relative path (`/pt-br/...`). */
