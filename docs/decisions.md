@@ -7,6 +7,56 @@
   Lightweight ADR style. See FRAMEWORK.md → Cross-cutting principles.
 -->
 
+## 2026-07-14 — URL structure: locale always in the path, module never in it
+
+- **Context.** `tech-stack.md` flagged URL and locale routing as *"the most
+  dangerous item on this list"*: SEO is the only acquisition channel, and
+  changing URLs later forfeits accumulated ranking. It had to be settled before
+  any code was written.
+- **Decision.** `/{locale}/{course}/{lesson}/` — e.g.
+  `/pt-br/fundamentos-de-programacao/o-que-e-um-programa/`. The **locale is
+  always present**, including the default `pt-br`; `/` is a static redirect to
+  it. The **module does not appear in the URL**. Slugs are Portuguese and
+  unaccented. Trailing slashes on (matching `output: 'export'`).
+- **Why.** Always prefixing the locale means no page is ever reachable at two
+  URLs, so there is no duplicate content to penalise and no redirect to unwind
+  when English ships — the alternative (bare `/` for pt-BR, `/en/` for English)
+  buys prettier URLs today and pays for them with a migration later. Modules stay
+  out of the path because grouping is the thing most likely to be reshuffled
+  while authoring 18 chapters, and a reshuffle must never break a URL. Portuguese
+  slugs because the audience searches in Portuguese.
+- **Consequences.** Every URL carries a locale segment, which is slightly less
+  pretty and requires a redirect at the root. Modules can be renamed or
+  re-ordered freely; **renaming a lesson file is now the one destructive act**,
+  so lesson slugs are frozen once published. Reversing any of this after launch
+  costs search ranking.
+
+---
+
+## 2026-07-14 — Content schema: order from filenames, grouping from frontmatter
+
+- **Context.** The schema is encoded in every lesson file, so changing it later
+  means touching all of them. Needed: reading order, module grouping, and enough
+  metadata to support the deferred search design.
+- **Decision.** `content/{locale}/{course}/` holds a `course.md` (metadata +
+  ordered module list) and one Markdown file per lesson. **Reading order comes
+  from a numeric filename prefix**; **module membership comes from lesson
+  frontmatter**; Zod validates both at build time and fails the build if a lesson
+  names a module that doesn't exist. Body content is plain Markdown with
+  `remark-directive` callouts.
+- **Why.** Order lives in exactly one place — the filename — so it can't drift
+  out of sync with a hand-maintained list, and the file tree reads in reading
+  order. Grouping lives in frontmatter because it's metadata, not sequence. A
+  malformed lesson failing the *build* (rather than shipping a broken page) is
+  the whole point of validating with Zod.
+- **Consequences.** Re-ordering lessons means renaming files — which changes
+  slugs, which breaks URLs (see above), so the numeric prefix is deliberately
+  **not** part of the slug. Inserting a lesson between two others needs either a
+  gap-numbering convention or a renumber of the tail (renumbering is safe: it
+  touches prefixes, not slugs).
+
+---
+
 ## 2026-07-14 — Feedback signal: analytics + GitHub errata, not an email
 
 - **Context.** The product deliberately has no accounts, no comments, no
