@@ -93,7 +93,7 @@ file as early as possible. Everything after that is widening, not proving.
 
 ### A.4 — Routes and the reading page
 
-- [ ] **Task.** `/[locale]/[course]/[lesson]` plus `generateStaticParams`;
+- [x] **Task.** `/[locale]/[course]/[lesson]` plus `generateStaticParams`;
       minimal lesson layout with prev/next. Static, unstyled but correct.
 - **Depends on:** A.3
 - **Done when:** `npm run build` emits static HTML for a real lesson and
