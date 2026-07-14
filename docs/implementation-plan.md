@@ -66,7 +66,7 @@ file as early as possible. Everything after that is widening, not proving.
 
 ### A.1 — Scaffold the Next.js app
 
-- [ ] **Task.** Next.js (App Router, TypeScript, `output: 'export'`), ESLint +
+- [x] **Task.** Next.js (App Router, TypeScript, `output: 'export'`), ESLint +
       Prettier, Vitest, `.gitignore`, `npm run dev` serving a placeholder page.
       Fill in `AGENTS.md` and replace the framework-guide `CLAUDE.md` with
       project context.
@@ -76,7 +76,7 @@ file as early as possible. Everything after that is widening, not proving.
 
 ### A.2 — Content schema + loader
 
-- [ ] **Task.** Zod schemas for course/module/lesson frontmatter; a loader that
+- [x] **Task.** Zod schemas for course/module/lesson frontmatter; a loader that
       reads `content/`, validates it, derives slugs and reading order, and throws a
       readable error on malformed content. Unit-tested against fixtures.
 - **Depends on:** A.1
