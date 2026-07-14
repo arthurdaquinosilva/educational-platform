@@ -85,7 +85,7 @@ file as early as possible. Everything after that is widening, not proving.
 
 ### A.3 — Markdown → HTML pipeline
 
-- [ ] **Task.** unified/remark/rehype: GFM, `remark-directive` callouts, heading
+- [x] **Task.** unified/remark/rehype: GFM, `remark-directive` callouts, heading
       slugs + anchors, and Shiki syntax highlighting at build time (zero client JS).
 - **Depends on:** A.2
 - **Done when:** a fixture lesson with a callout and a Python code block renders
@@ -227,3 +227,11 @@ file as early as possible. Everything after that is widening, not proving.
   almost entirely to translation (D.2). Fence languages are the one real loss:
   Pygments highlighted everything as Python, including ASCII diagrams and shell
   output, so the converter has to infer the language and D.2 must verify it.
+
+- **2026-07-14 (A.3) — dropped `rehype-slug` for a custom heading-slug plugin.**
+  Its slugger keeps accents, so a Portuguese heading would anchor at
+  `#o-que-é-um-programa` — an accented fragment, fragile when shared and
+  inconsistent with the site's unaccented slug rule. Replaced by a one-file
+  plugin over a shared `slugify` (`src/lib/content/slug.ts`) that strips
+  diacritics, so headings, the D.1 converter and any lesson-slug tooling all
+  emit byte-identical slugs.
