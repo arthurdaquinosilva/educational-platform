@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git Mastery — Self-Study Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root[data-theme="dark"] {
+  --tk-keyword: #ff79c6;
+  --tk-string: #f1fa8c;
+  --tk-number: #bd93f9;
+  --tk-comment: #6272a4;
+  --tk-operator: #ff79c6;
+  --tk-name: #e8eaed;
+  --tk-fn: #50fa7b;
+  --tk-builtin: #8be9fd;
+  --tk-punct: #f8f8f2;
+  --tk-tag: #ff79c6;
+  --tk-attr: #50fa7b;
+  --tk-attr-value: #f1fa8c;
+}
+:root[data-theme="light"] {
+  --tk-keyword: #af005f;
+  --tk-string: #008000;
+  --tk-number: #0070c0;
+  --tk-comment: #808080;
+  --tk-operator: #af005f;
+  --tk-name: #1a1a1a;
+  --tk-fn: #006d49;
+  --tk-builtin: #005f87;
+  --tk-punct: #333;
+  --tk-tag: #af005f;
+  --tk-attr: #006d49;
+  --tk-attr-value: #008000;
+}
+.highlight { background: transparent !important; }
+.highlight pre { background: transparent !important; border: none !important; padding: 0 !important; margin: 0 !important; }
+.highlight .k, .highlight .kc, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt { color: var(--tk-keyword); font-weight: 600; }
+.highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .ss { color: var(--tk-string); }
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .mo, .highlight .il { color: var(--tk-number); }
+.highlight .c, .highlight .ch, .highlight .cm, .highlight .cp, .highlight .cpf, .highlight .c1, .highlight .cs { color: var(--tk-comment); font-style: italic; }
+.highlight .o, .highlight .ow { color: var(--tk-operator); }
+.highlight .n, .highlight .na, .highlight .nb, .highlight .nc, .highlight .nd, .highlight .ne, .highlight .ni, .highlight .nl, .highlight .nn, .highlight .nx, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi { color: var(--tk-name); }
+.highlight .nt { color: var(--tk-tag); font-weight: 600; }
+.highlight .na { color: var(--tk-attr); }
+.highlight .nf, .highlight .fm { color: var(--tk-fn); }
+.highlight .bp { color: var(--tk-builtin); }
+.highlight .p { color: var(--tk-punct); }
+.highlight .err { color: #ff6b8a; }
+.highlight .w { color: inherit; }
+</style>
+<style>
+:root[data-theme="dark"] {
+  --bg: #0b0d10;
+  --bg-elevated: #14171c;
+  --bg-code: #1a1d23;
+  --border: #25292f;
+  --border-soft: #1e2127;
+  --text: #e8eaed;
+  --text-dim: #9aa0a6;
+  --text-faint: #5f6368;
+  --accent: #f78166;
+  --accent-dim: #3fc7b0;
+  --accent-glow: rgba(247, 129, 102, 0.18);
+  --amber: #ffb547;
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  --shadow-soft: 0 2px 8px rgba(0,0,0,0.3);
+}
+:root[data-theme="light"] {
+  --bg: #fafaf7;
+  --bg-elevated: #ffffff;
+  --bg-code: #f4f4ef;
+  --border: #e5e3dc;
+  --border-soft: #ecebe5;
+  --text: #1a1a1a;
+  --text-dim: #555;
+  --text-faint: #888;
+  --accent: #d04a2a;
+  --accent-dim: #0a7a6f;
+  --accent-glow: rgba(208, 74, 42, 0.12);
+  --amber: #c97b00;
+  --shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.65; min-height: 100vh; overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+:root[data-theme="dark"] body::before {
+  content: ''; position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 48px 48px; pointer-events: none; z-index: 0;
+}
+.app { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; position: relative; z-index: 1; }
+.sidebar {
+  background: var(--bg-elevated); border-right: 1px solid var(--border);
+  height: 100vh; position: sticky; top: 0; overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.sidebar-header { padding: 28px 24px 20px; border-bottom: 1px solid var(--border-soft); }
+.brand { display: flex; align-items: baseline; gap: 10px; font-family: 'JetBrains Mono', monospace; }
+.brand-prompt { color: var(--accent); font-weight: 700; font-size: 18px; }
+.brand-text {
+  font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600;
+  letter-spacing: -0.02em; color: var(--text);
+}
+.brand-sub {
+  margin-top: 4px; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--text-faint); letter-spacing: 0.05em; text-transform: uppercase;
+}
+.progress-bar { margin-top: 16px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill {
+  height: 100%; background: var(--accent); width: 0%;
+  transition: width 0.4s ease; box-shadow: 0 0 8px var(--accent-glow);
+}
+.progress-text {
+  margin-top: 6px; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--text-dim);
+}
+.sidebar-nav { padding: 12px 12px 24px; flex: 1; }
+.nav-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 9px 12px; border-radius: 6px;
+  text-decoration: none; color: var(--text-dim);
+  font-size: 14px; font-weight: 500;
+  transition: all 0.15s; cursor: pointer;
+  border-left: 2px solid transparent; margin-bottom: 1px;
+  position: relative;
+}
+.nav-item:hover { background: var(--bg-code); color: var(--text); }
+.nav-item.active { background: var(--bg-code); color: var(--accent); border-left-color: var(--accent); }
+.nav-item.completed .num::after {
+  content: '✓'; position: absolute; top: -4px; right: -4px;
+  font-size: 9px; color: var(--accent);
+  background: var(--bg-elevated); border-radius: 50%;
+  width: 12px; height: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+.nav-item .num {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--text-faint); width: 22px; text-align: center;
+  flex-shrink: 0; position: relative;
+}
+.nav-item.active .num, .nav-item.completed .num { color: var(--accent); }
+.nav-item .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-footer {
+  padding: 16px 20px; border-top: 1px solid var(--border-soft);
+  display: flex; gap: 8px; align-items: center; justify-content: space-between;
+}
+.kbd-hint { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); }
+.kbd-hint kbd {
+  background: var(--bg-code); border: 1px solid var(--border);
+  padding: 1px 5px; border-radius: 3px; font-size: 10px; color: var(--text-dim);
+}
+.theme-toggle, .search-btn {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); width: 32px; height: 32px; border-radius: 6px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: all 0.15s;
+}
+.theme-toggle:hover, .search-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.main { padding: 64px 80px 120px; max-width: 880px; width: 100%; margin: 0 auto; min-width: 0; overflow-wrap: break-word; }
+.main * { min-width: 0; }
+.course-section { display: none; animation: fadeIn 0.4s ease; }
+.course-section.visible { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-header-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.section-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.15em; color: var(--accent);
+  background: var(--accent-glow); padding: 4px 10px; border-radius: 3px;
+  border: 1px solid var(--accent-glow);
+}
+.btn-complete {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); padding: 5px 12px; border-radius: 6px;
+  cursor: pointer; font-size: 12px; font-family: 'JetBrains Mono', monospace;
+  display: flex; align-items: center; gap: 6px; transition: all 0.15s;
+}
+.btn-complete:hover { border-color: var(--accent); color: var(--accent); }
+.btn-complete.done { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+
+.section-title, .course-section > h1 {
+  font-family: 'Fraunces', serif; font-size: 48px; line-height: 1.1;
+  font-weight: 600; letter-spacing: -0.025em; margin-bottom: 32px; color: var(--text);
+  overflow-wrap: break-word; word-break: break-word; hyphens: auto;
+}
+.course-section h2 {
+  font-family: 'Fraunces', serif; font-size: 30px; line-height: 1.25;
+  font-weight: 600; letter-spacing: -0.02em;
+  margin: 56px 0 16px; padding-top: 16px; scroll-margin-top: 20px;
+  color: var(--text); position: relative;
+}
+.course-section h2::before {
+  content: '§'; color: var(--accent); margin-right: 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 18px; vertical-align: middle; opacity: 0.7;
+}
+.course-section h3 {
+  font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600;
+  margin: 32px 0 12px; color: var(--text);
+}
+.course-section p { margin: 16px 0; color: var(--text); font-size: 16px; }
+.course-section a {
+  color: var(--accent); text-decoration: none;
+  border-bottom: 1px solid transparent; transition: border-color 0.15s;
+}
+.course-section a:hover { border-bottom-color: var(--accent); }
+.course-section ul, .course-section ol { margin: 16px 0; padding-left: 28px; }
+.course-section li { margin: 8px 0; color: var(--text); }
+.course-section li::marker { color: var(--accent); }
+.course-section strong { color: var(--text); font-weight: 600; }
+:root[data-theme="dark"] .course-section strong { color: #fff; }
+.course-section em { font-style: italic; color: var(--text); }
+.course-section code {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.88em;
+  background: var(--bg-code); padding: 2px 6px; border-radius: 3px;
+  border: 1px solid var(--border-soft); color: var(--amber);
+}
+.course-section pre {
+  position: relative; background: var(--bg-code) !important;
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 20px 24px !important; margin: 20px 0; overflow-x: auto;
+  font-size: 13.5px !important; line-height: 1.6 !important;
+  box-shadow: var(--shadow-soft);
+}
+.course-section pre code {
+  background: transparent !important; border: none !important;
+  padding: 0 !important; color: var(--text) !important; font-size: inherit !important;
+}
+.copy-btn {
+  position: absolute; top: 10px; right: 10px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-dim); padding: 4px 10px; border-radius: 4px;
+  cursor: pointer; font-size: 11px; font-family: 'JetBrains Mono', monospace;
+  opacity: 0; transition: all 0.15s;
+}
+.course-section pre:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+.copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+
+.course-section blockquote {
+  margin: 24px 0; padding: 16px 22px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-elevated); color: var(--text-dim);
+  border-radius: 0 6px 6px 0; font-style: italic;
+}
+.course-section blockquote p { margin: 0; }
+
+.course-section table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14px; }
+.course-section th, .course-section td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.course-section th {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--accent); background: var(--bg-code); font-weight: 600;
+}
+.course-section tr:hover { background: var(--bg-elevated); }
+
+.course-section hr {
+  border: none; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 40px 0;
+}
+.course-section blockquote + hr { margin: 24px 0; }
+
+.course-section details {
+  margin: 12px 0 24px; background: var(--bg-elevated);
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.course-section summary {
+  cursor: pointer; padding: 12px 18px;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  color: var(--accent); background: var(--accent-glow);
+  font-weight: 500; user-select: none; list-style: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.course-section summary::-webkit-details-marker { display: none; }
+.course-section summary::before { content: '▶'; font-size: 9px; transition: transform 0.2s; }
+.course-section details[open] summary::before { transform: rotate(90deg); }
+.course-section details > *:not(summary) { padding: 0 18px; }
+.course-section details pre { margin: 16px 18px !important; padding: 16px 20px !important; }
+
+/* Live-demo iframes */
+.live-demo {
+  margin: 16px 0 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.live-demo-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  background: var(--bg-elevated);
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.live-demo-label::before {
+  content: '▸';
+  color: var(--accent);
+}
+.live-demo iframe {
+  display: block;
+  width: 100%;
+  border: none;
+  background: white;
+}
+.course-section pre + .live-demo { margin-top: -12px; border-top-left-radius: 0; border-top-right-radius: 0; }
+
+.section-footer {
+  display: flex; justify-content: space-between; gap: 16px;
+  margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border);
+}
+.btn-prev, .btn-next {
+  background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text);
+  padding: 14px 22px; border-radius: 8px; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+  transition: all 0.15s;
+}
+.btn-next {
+  background: var(--accent); color: #0b0d10;
+  border-color: var(--accent); font-weight: 600; margin-left: auto;
+}
+.btn-prev:hover { border-color: var(--accent); color: var(--accent); }
+.btn-next:hover { background: var(--accent-dim); border-color: var(--accent-dim); transform: translateX(2px); }
+
+.search-overlay {
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,0.6); display: none;
+  align-items: flex-start; justify-content: center;
+  z-index: 100; padding-top: 12vh;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.search-overlay.visible { display: flex; }
+.search-modal {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 12px; width: 90%; max-width: 600px;
+  box-shadow: var(--shadow); overflow: hidden;
+  animation: slideDown 0.2s ease;
+}
+@keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.search-input {
+  width: 100%; background: transparent; border: none;
+  padding: 20px 24px; font-size: 16px; color: var(--text);
+  font-family: inherit; border-bottom: 1px solid var(--border); outline: none;
+}
+.search-input::placeholder { color: var(--text-faint); }
+.search-results { max-height: 50vh; overflow-y: auto; }
+.search-result { padding: 12px 24px; cursor: pointer; border-bottom: 1px solid var(--border-soft); transition: background 0.1s; }
+.search-result:hover, .search-result.highlighted { background: var(--bg-code); }
+.search-result-title { font-size: 14px; color: var(--text); font-weight: 500; margin-bottom: 2px; }
+.search-result-section { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); }
+.search-empty { padding: 32px 24px; text-align: center; color: var(--text-faint); font-size: 14px; }
+
+.mobile-menu-btn {
+  display: none; position: fixed; top: 16px; right: 16px; z-index: 50;
+  background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text);
+  width: 42px; height: 42px; border-radius: 8px;
+  cursor: pointer; font-size: 18px; box-shadow: var(--shadow-soft);
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: fixed; left: -100%; top: 0;
+    width: 85%; max-width: 320px; z-index: 60;
+    transition: left 0.25s ease; box-shadow: var(--shadow);
+  }
+  .sidebar.open { left: 0; }
+  .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+  .main { padding: 64px 20px 80px; }
+  .section-title, .course-section > h1 { font-size: 34px; }
+  .course-section h2 { font-size: 24px; }
+  .section-footer { flex-direction: column; }
+  .btn-next { margin-left: 0; }
+  .backdrop { display: none; position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0,0,0,0.4); z-index: 55; }
+  .backdrop.visible { display: block; }
+}
+
+.reading-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent); width: 0%; z-index: 200;
+  transition: width 0.1s; box-shadow: 0 0 8px var(--accent-glow);
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+@media print {
+  .sidebar, .mobile-menu-btn, .reading-progress, .section-footer, .copy-btn, .btn-complete { display: none !important; }
+  .app { grid-template-columns: 1fr; }
+  .main { padding: 20px; max-width: 100%; }
+  .course-section { display: block !important; page-break-after: always; }
+  body { background: white !important; color: black !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="reading-progress" id="reading-progress"></div>
+<button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">☰</button>
+<div class="backdrop" id="backdrop"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <span class="brand-prompt">$</span>
+        <span class="brand-text">git.mastery</span>
+      </div>
+      <div class="brand-sub">Self-study course · 7 sections</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-text" id="progress-text">0 of 7 complete</div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<a class="nav-item" data-section="intro" href="#intro"><span class="num">★</span><span class="label">Overview</span></a>
+<a class="nav-item" data-section="section-0" href="#section-0"><span class="num">1</span><span class="label">Getting Started</span></a>
+<a class="nav-item" data-section="section-1" href="#section-1"><span class="num">2</span><span class="label">Creating Snapshots</span></a>
+<a class="nav-item" data-section="section-2" href="#section-2"><span class="num">3</span><span class="label">Browsing History</span></a>
+<a class="nav-item" data-section="section-3" href="#section-3"><span class="num">4</span><span class="label">Branching</span></a>
+<a class="nav-item" data-section="section-4" href="#section-4"><span class="num">5</span><span class="label">Collaboration</span></a>
+<a class="nav-item" data-section="section-5" href="#section-5"><span class="num">6</span><span class="label">Rewriting History</span></a>
+<a class="nav-item" data-section="section-6" href="#section-6"><span class="num">7</span><span class="label">Capstone Project: Run a Real Git Workflow</span></a>
+<a class="nav-item" data-section="section-7" href="#section-7"><span class="num">✓</span><span class="label">Course Conclusion</span></a>
+</nav>
+    <div class="sidebar-footer">
+      <div class="kbd-hint">
+        <kbd>⌘</kbd><kbd>K</kbd> search · <kbd>←</kbd><kbd>→</kbd> nav
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="search-btn" id="search-btn" aria-label="Search">⌕</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+<section class="course-section" id="section-intro" data-section-id="intro"><h1>The Ultimate Git Mastery — A Self-Study Course</h1>
+<blockquote>
+<p>A structured, hands-on Git course that takes you from your first commit to confident, everyday version control — and the workflows real teams rely on.
+All commands work on macOS, Linux, and Windows (Git Bash).</p>
+</blockquote>
+<hr />
+<h2>How to use this course</h2>
+<ul>
+<li><strong>Open a terminal and follow along.</strong> Git is muscle memory — typing the commands is what teaches you.</li>
+<li>Each section follows the same shape: <strong>Concept → Commands → Real example → Exercises with solutions</strong>.</li>
+<li>Don't skip the exercises. Try them yourself first; only check the solution when stuck.</li>
+<li>Create a throwaway directory (<code>mkdir ~/git-practice</code>) and break things freely. You can always <code>rm -rf</code> and start over.</li>
+</ul>
+<hr /></section>
+<section class="course-section" id="section-0" data-section-id="section-0"><div class="section-header-meta">  <span class="section-tag">SECTION 1</span>  <button class="btn-complete" data-complete="section-0"><span class="check">○</span> Mark complete</button></div><h1 class="section-title">Getting Started</h1><h2 id="11-introduction">1.1 Introduction</h2>
+<p>Git is the most popular version control system in the world. It tracks your project's history, lets you undo mistakes, and lets teams work on the same code without overwriting each other.</p>
+<p>By the end of this course you will be able to:</p>
+<ul>
+<li>Create snapshots of your work (commits) and navigate between them.</li>
+<li>Branch off to try ideas without breaking your main code.</li>
+<li>Merge work back together, with or without conflicts.</li>
+<li>Collaborate with others via remote repositories (GitHub, GitLab, etc.).</li>
+<li>Rewrite history when you need to clean up your commits.</li>
+</ul>
+<h2 id="12-what-is-git">1.2 What is Git?</h2>
+<p>A <strong>version control system</strong> (VCS) tracks changes to files over time so you can:</p>
+<ul>
+<li>See what changed, when, and by whom.</li>
+<li>Go back to any previous version.</li>
+<li>Try experimental changes without losing your stable work.</li>
+<li>Collaborate with others on the same files.</li>
+</ul>
+<p>Git specifically is:</p>
+<ul>
+<li><strong>Distributed.</strong> Every developer has a full copy of the project history. You don't need a server to work — you can commit offline, on a plane, anywhere.</li>
+<li><strong>Fast.</strong> Operations happen locally, so commits, diffs, and log views are instant.</li>
+<li><strong>Snapshot-based.</strong> Most VCSes track <em>changes</em> to files. Git tracks <em>snapshots</em> of the whole project. This sounds wasteful but is actually clever — and it's why Git's branching is so cheap.</li>
+</ul>
+<p>Git was created by Linus Torvalds in 2005 to manage the Linux kernel. He named it after himself — "git" is British slang for an unpleasant person.</p>
+<h2 id="13-using-git">1.3 Using Git</h2>
+<p>There are several ways to use Git:</p>
+<ul>
+<li><strong>Command line</strong> — what we'll use. This is what every other interface calls under the hood, so learning it makes everything else clearer.</li>
+<li><strong>GUI tools</strong> — GitKraken, Sourcetree, GitHub Desktop. Friendlier visualization, but they hide what's happening.</li>
+<li><strong>IDE integration</strong> — VS Code, IntelliJ, Sublime all have built-in Git. Great for daily work once you understand the underlying commands.</li>
+</ul>
+<p>We'll focus on the command line because it's universal, scriptable, and forces you to understand Git instead of memorizing button locations.</p>
+<h2 id="14-installing-git">1.4 Installing Git</h2>
+<p><strong>macOS:</strong></p>
+<div class="highlight"><pre><span></span><span class="c1"># Easiest: install via Homebrew</span>
+brew<span class="w"> </span>install<span class="w"> </span>git
+
+<span class="c1"># Or: install Xcode Command Line Tools (also installs git)</span>
+xcode-select<span class="w"> </span>--install
+</pre></div>
+
+<p><strong>Linux (Ubuntu/Debian):</strong></p>
+<div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git
+</pre></div>
+
+<p><strong>Windows:</strong>
+Download "Git for Windows" from git-scm.com. This installs <code>git</code>, plus a Bash shell called <strong>Git Bash</strong> that gives you a Unix-like terminal — use it instead of cmd.exe for this course.</p>
+<p>Verify the install:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>--version
+<span class="c1"># Should print something like: git version 2.45.0</span>
+</pre></div>
+
+<h2 id="15-configuring-git">1.5 Configuring Git</h2>
+<p>Before your first commit, Git needs to know who you are. These settings get attached to every commit.</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Your Name&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;you@example.com&quot;</span>
+</pre></div>
+
+<p>Set your default editor (the program that opens when Git needs you to write a commit message):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">&quot;code --wait&quot;</span><span class="w">   </span><span class="c1"># VS Code</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">&quot;vim&quot;</span><span class="w">            </span><span class="c1"># vim</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">&quot;nano&quot;</span><span class="w">           </span><span class="c1"># nano</span>
+</pre></div>
+
+<p>Set the default branch name for new repositories (modern convention is <code>main</code>):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>init.defaultBranch<span class="w"> </span>main
+</pre></div>
+
+<p>Make sure line endings don't get mangled across operating systems:</p>
+<div class="highlight"><pre><span></span><span class="c1"># On macOS / Linux:</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.autocrlf<span class="w"> </span>input
+
+<span class="c1"># On Windows:</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.autocrlf<span class="w"> </span><span class="nb">true</span>
+</pre></div>
+
+<p>View all your settings:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--list
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>-e<span class="w">   </span><span class="c1"># opens the config file in your editor</span>
+</pre></div>
+
+<p><strong>The three config levels:</strong></p>
+<ul>
+<li><code>--system</code> — for every user on this machine. Lives in <code>/etc/gitconfig</code>.</li>
+<li><code>--global</code> — for your user, across all repos. Lives in <code>~/.gitconfig</code>.</li>
+<li>(no flag, inside a repo) — for that one repo. Lives in <code>.git/config</code>.</li>
+</ul>
+<p>More specific overrides less specific. So you can set a different email on a work repo while keeping a personal email globally.</p>
+<h2 id="16-getting-help">1.6 Getting Help</h2>
+<p>When you forget a flag (you will, constantly):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span><span class="nb">help</span><span class="w"> </span>config<span class="w">           </span><span class="c1"># opens the full manual</span>
+git<span class="w"> </span>config<span class="w"> </span>--help<span class="w">         </span><span class="c1"># same thing</span>
+git<span class="w"> </span>config<span class="w"> </span>-h<span class="w">             </span><span class="c1"># short, one-screen reference</span>
+</pre></div>
+
+<p><code>-h</code> (lowercase) is your friend — it gives a concise summary you can scan in 5 seconds. The full man pages are excellent but long.</p>
+<h2 id="17-cheat-sheet-section-1">1.7 Cheat Sheet — Section 1</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>--version<span class="w">                  </span><span class="c1"># check installed version</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;...&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;...&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>init.defaultBranch<span class="w"> </span>main
+git<span class="w"> </span>config<span class="w"> </span>--list<span class="w">              </span><span class="c1"># show all config</span>
+git<span class="w"> </span><span class="nb">help</span><span class="w"> </span>&lt;command&gt;<span class="w">             </span><span class="c1"># full manual</span>
+git<span class="w"> </span>&lt;command&gt;<span class="w"> </span>-h<span class="w">               </span><span class="c1"># short help</span>
+</pre></div>
+
+<hr /><div class="section-footer">  <button class="btn-next" data-next="section-1">Start: Creating Snapshots →</button></div></section>
+<section class="course-section" id="section-1" data-section-id="section-1"><div class="section-header-meta">  <span class="section-tag">SECTION 2</span>  <button class="btn-complete" data-complete="section-1"><span class="check">○</span> Mark complete</button></div><h1 class="section-title">Creating Snapshots</h1><p>The fundamental Git operation: taking snapshots of your project. Every section after this builds on these commands.</p>
+<h2 id="21-initializing-a-repository">2.1 Initializing a Repository</h2>
+<p>A Git repository is just a regular folder with a hidden <code>.git</code> directory inside. To turn a folder into a repository:</p>
+<div class="highlight"><pre><span></span>mkdir<span class="w"> </span>my-project
+<span class="nb">cd</span><span class="w"> </span>my-project
+git<span class="w"> </span>init
+</pre></div>
+
+<p>You'll see: <code>Initialized empty Git repository in .../my-project/.git/</code></p>
+<p>The <code>.git</code> folder is where Git stores everything — all your history, all your branches, all your config for this repo. <strong>Don't touch it manually.</strong> Deleting <code>.git</code> removes the entire history; the actual files in your folder are untouched.</p>
+<p>To see this hidden folder:</p>
+<div class="highlight"><pre><span></span>ls<span class="w"> </span>-la<span class="w">              </span><span class="c1"># macOS/Linux: lists hidden files</span>
+dir<span class="w"> </span>/a<span class="w">              </span><span class="c1"># Windows cmd</span>
+</pre></div>
+
+<h2 id="22-git-workflow">2.2 Git Workflow</h2>
+<p>Git has three "states" your files can be in:</p>
+<div class="highlight"><pre><span></span><span class="w">  </span>Working<span class="w"> </span>Directory<span class="w">  </span>→<span class="w">  </span>Staging<span class="w"> </span>Area<span class="w">  </span>→<span class="w">  </span>Repository
+<span class="w">       </span><span class="o">(</span>edits<span class="o">)</span><span class="w">            </span><span class="o">(</span>git<span class="w"> </span>add<span class="o">)</span><span class="w">       </span><span class="o">(</span>git<span class="w"> </span>commit<span class="o">)</span>
+</pre></div>
+
+<ol>
+<li><strong>Working directory</strong> — your actual files. Edit, delete, rename freely.</li>
+<li><strong>Staging area</strong> (also called the "index") — a list of changes you've marked as ready to commit. Think of it as a draft of your next snapshot.</li>
+<li><strong>Repository</strong> — the permanent history. Once committed, a snapshot is preserved forever (almost — see Section 6).</li>
+</ol>
+<p>The staging area is what confuses most beginners. Why two steps? Because real commits are <strong>deliberate</strong>. You might edit 5 files but only want to commit 2 of them as one logical change. Staging lets you pick.</p>
+<h2 id="23-staging-files">2.3 Staging Files</h2>
+<p>Add files to the staging area with <code>git add</code>:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>file1.txt<span class="w">              </span><span class="c1"># one file</span>
+git<span class="w"> </span>add<span class="w"> </span>file1.txt<span class="w"> </span>file2.txt<span class="w">    </span><span class="c1"># multiple files</span>
+git<span class="w"> </span>add<span class="w"> </span>*.js<span class="w">                   </span><span class="c1"># pattern</span>
+git<span class="w"> </span>add<span class="w"> </span>.<span class="w">                      </span><span class="c1"># everything in current directory and below</span>
+git<span class="w"> </span>add<span class="w"> </span>-A<span class="w">                     </span><span class="c1"># all changes anywhere in the repo</span>
+</pre></div>
+
+<p>Check what's staged:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>status
+</pre></div>
+
+<p>You'll see something like:</p>
+<div class="highlight"><pre><span></span>Changes<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>committed:
+<span class="w">  </span>new<span class="w"> </span>file:<span class="w">   </span>file1.txt
+
+Changes<span class="w"> </span>not<span class="w"> </span>staged<span class="w"> </span><span class="k">for</span><span class="w"> </span>commit:
+<span class="w">  </span>modified:<span class="w">   </span>file2.txt
+</pre></div>
+
+<h2 id="24-committing-changes">2.4 Committing Changes</h2>
+<p>Once you've staged what you want, commit:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit&quot;</span>
+</pre></div>
+
+<p><code>-m</code> provides the message inline. Without it, Git opens your editor for a longer message:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>commit
+</pre></div>
+
+<p>This is preferred for non-trivial commits because you can write a multi-line message:</p>
+<div class="highlight"><pre><span></span>Add<span class="w"> </span>user<span class="w"> </span>authentication
+
+-<span class="w"> </span>Hashes<span class="w"> </span>passwords<span class="w"> </span>with<span class="w"> </span>bcrypt
+-<span class="w"> </span>Adds<span class="w"> </span>/login<span class="w"> </span>and<span class="w"> </span>/signup<span class="w"> </span>routes
+-<span class="w"> </span>Sets<span class="w"> </span>session<span class="w"> </span>cookies
+</pre></div>
+
+<p>The first line is the <strong>subject</strong> (under 50 chars, imperative mood: "Add", "Fix", "Remove" — not "Added" or "Adds"). Then a blank line, then the body explaining <em>why</em>.</p>
+<h2 id="25-committing-best-practices">2.5 Committing Best Practices</h2>
+<p>A good commit is:</p>
+<ul>
+<li><strong>Small.</strong> One logical change per commit. Don't mix "fix bug" with "refactor".</li>
+<li><strong>Atomic.</strong> The project should build and tests should pass at every commit.</li>
+<li><strong>Descriptive.</strong> "Fix bug" tells you nothing in 6 months. "Fix off-by-one error in pagination" does.</li>
+<li><strong>Imperative subject.</strong> "Add login button" not "Added" or "Adds" — completes the sentence "This commit will...".</li>
+</ul>
+<p>These habits feel pedantic at first, but pay off enormously when you're hunting a regression months later with <code>git bisect</code> or trying to understand why someone made a change.</p>
+<h2 id="26-skipping-the-staging-area">2.6 Skipping the Staging Area</h2>
+<p>For small changes you're <em>sure</em> about, <code>-a</code> stages all modified (already-tracked) files and commits in one step:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">&quot;Fix typo in README&quot;</span>
+</pre></div>
+
+<p>Note: <code>-a</code> does <strong>not</strong> add new (untracked) files. You still need <code>git add</code> for those.</p>
+<h2 id="27-removing-files">2.7 Removing Files</h2>
+<p>To delete a file from both the working directory and the repository:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>rm<span class="w"> </span>file.txt
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Remove file.txt&quot;</span>
+</pre></div>
+
+<p>If you've already deleted the file manually with <code>rm</code> or your file explorer:</p>
+<div class="highlight"><pre><span></span>rm<span class="w"> </span>file.txt<span class="w">        </span><span class="c1"># or just delete it in your file manager</span>
+git<span class="w"> </span>add<span class="w"> </span>file.txt<span class="w">   </span><span class="c1"># stage the deletion (yes, &quot;add&quot; stages deletes too)</span>
+<span class="c1"># or:</span>
+git<span class="w"> </span>add<span class="w"> </span>-A<span class="w">         </span><span class="c1"># stage all changes including deletions</span>
+</pre></div>
+
+<p>To remove a file from the repository but <strong>keep it on disk</strong> (e.g., you committed a config file by mistake):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>rm<span class="w"> </span>--cached<span class="w"> </span>config.json
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Stop tracking config.json&quot;</span>
+<span class="c1"># Now add config.json to .gitignore so it doesn&#39;t come back</span>
+</pre></div>
+
+<h2 id="28-renaming-or-moving-files">2.8 Renaming or Moving Files</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>mv<span class="w"> </span>old-name.txt<span class="w"> </span>new-name.txt
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Rename file&quot;</span>
+</pre></div>
+
+<p>This is exactly the same as:</p>
+<div class="highlight"><pre><span></span>mv<span class="w"> </span>old-name.txt<span class="w"> </span>new-name.txt<span class="w">   </span><span class="c1"># rename via OS</span>
+git<span class="w"> </span>add<span class="w"> </span>old-name.txt<span class="w"> </span>new-name.txt
+</pre></div>
+
+<p>Git tracks renames by detecting content similarity — if a deleted file's contents match a new file's contents, Git infers a rename.</p>
+<h2 id="29-ignoring-files">2.9 Ignoring Files</h2>
+<p>You almost never want to commit:
+- Build outputs (<code>dist/</code>, <code>build/</code>, <code>*.class</code>, <code>*.o</code>)
+- Dependencies (<code>node_modules/</code>, <code>vendor/</code>, <code>__pycache__/</code>)
+- IDE config (<code>.vscode/</code>, <code>.idea/</code>)
+- OS files (<code>.DS_Store</code>, <code>Thumbs.db</code>)
+- Secrets (<code>.env</code>, API keys, credentials)</p>
+<p>Create a <code>.gitignore</code> file at the root of your repo:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Dependencies</span>
+node_modules/
+
+<span class="c1"># Build output</span>
+dist/
+*.log
+
+<span class="c1"># OS</span>
+.DS_Store
+Thumbs.db
+
+<span class="c1"># IDE</span>
+.vscode/
+.idea/
+
+<span class="c1"># Secrets — IMPORTANT</span>
+.env
+</pre></div>
+
+<p>Lines starting with <code>#</code> are comments. Trailing <code>/</code> means "directory". <code>*</code> matches any number of characters (except <code>/</code>).</p>
+<p>Then commit it:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>.gitignore
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add .gitignore&quot;</span>
+</pre></div>
+
+<p><strong>Important:</strong> <code>.gitignore</code> only ignores files Git <strong>isn't already tracking</strong>. If you accidentally committed <code>secrets.env</code> first, adding it to <code>.gitignore</code> won't remove it. You'd need:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>rm<span class="w"> </span>--cached<span class="w"> </span>secrets.env
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;secrets.env&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>.gitignore
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Stop tracking secrets.env&quot;</span>
+</pre></div>
+
+<p>For boilerplate <code>.gitignore</code> files for any language, see github.com/github/gitignore — copy what fits your project.</p>
+<h3>🏋️ Exercise 2.9</h3>
+<blockquote>
+<p>Create a new repository. Make a folder called <code>bin/</code> and put a file <code>app.exe</code> in it. Also create <code>README.md</code>. Configure <code>.gitignore</code> so <code>bin/</code> is ignored. Verify with <code>git status</code> that only <code>README.md</code> and <code>.gitignore</code> show up.</p>
+</blockquote>
+<details><summary>Solution</summary>
+
+
+<div class="highlight"><pre><span></span>mkdir<span class="w"> </span>test-ignore<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>test-ignore
+git<span class="w"> </span>init
+mkdir<span class="w"> </span>bin
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;fake binary&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>bin/app.exe
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;# My Project&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>README.md
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;bin/&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>.gitignore
+git<span class="w"> </span>status
+<span class="c1"># Should show: README.md, .gitignore (untracked); bin/ is ignored.</span>
+</pre></div>
+
+
+</details>
+
+<h2 id="210-short-status">2.10 Short Status</h2>
+<p><code>git status</code> is verbose. For a compact view:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>status<span class="w"> </span>-s
+</pre></div>
+
+<p>Output uses two-character codes:</p>
+<div class="highlight"><pre><span></span><span class="w"> </span>M<span class="w"> </span>file1.txt<span class="w">    </span><span class="o">(</span>modified,<span class="w"> </span>not<span class="w"> </span>staged<span class="o">)</span>
+M<span class="w">  </span>file2.txt<span class="w">    </span><span class="o">(</span>modified,<span class="w"> </span>staged<span class="o">)</span>
+MM<span class="w"> </span>file3.txt<span class="w">    </span><span class="o">(</span>modified,<span class="w"> </span>staged<span class="w"> </span>AND<span class="w"> </span>modified<span class="w"> </span>again<span class="w"> </span>after<span class="w"> </span>staging<span class="o">)</span>
+A<span class="w">  </span>file4.txt<span class="w">    </span><span class="o">(</span>newly<span class="w"> </span>added,<span class="w"> </span>staged<span class="o">)</span>
+??<span class="w"> </span>file5.txt<span class="w">    </span><span class="o">(</span>untracked<span class="o">)</span>
+D<span class="w">  </span>file6.txt<span class="w">    </span><span class="o">(</span>deleted,<span class="w"> </span>staged<span class="o">)</span>
+</pre></div>
+
+<p>Left column = staging area. Right column = working directory. Once you internalize this, <code>git status -s</code> becomes your default.</p>
+<h2 id="211-viewing-staged-and-unstaged-changes">2.11 Viewing Staged and Unstaged Changes</h2>
+<p><code>git status</code> tells you <em>which</em> files changed. To see <em>what</em> changed:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>diff<span class="w">                  </span><span class="c1"># unstaged changes (working dir vs staging)</span>
+git<span class="w"> </span>diff<span class="w"> </span>--staged<span class="w">         </span><span class="c1"># staged changes (staging vs last commit)</span>
+git<span class="w"> </span>diff<span class="w"> </span>HEAD<span class="w">             </span><span class="c1"># all changes (working dir vs last commit)</span>
+</pre></div>
+
+<p><code>--cached</code> is a synonym for <code>--staged</code> — they do the same thing.</p>
+<p>Limit to one file:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>diff<span class="w"> </span>file.txt
+</pre></div>
+
+<p>Reading a diff:</p>
+<div class="highlight"><pre><span></span>diff<span class="w"> </span>--git<span class="w"> </span>a/file.txt<span class="w"> </span>b/file.txt
+index<span class="w"> </span>1234abc..5678def<span class="w"> </span><span class="m">100644</span>
+---<span class="w"> </span>a/file.txt<span class="w">          </span><span class="c1"># the &quot;before&quot; version</span>
++++<span class="w"> </span>b/file.txt<span class="w">          </span><span class="c1"># the &quot;after&quot; version</span>
+@@<span class="w"> </span>-1,3<span class="w"> </span>+1,4<span class="w"> </span>@@<span class="w">        </span><span class="c1"># @@ chunk header: lines 1-3 became lines 1-4</span>
+<span class="w"> </span>unchanged<span class="w"> </span>line
+-removed<span class="w"> </span>line<span class="w">          </span><span class="c1"># lines starting with - were removed</span>
++added<span class="w"> </span>line<span class="w">            </span><span class="c1"># lines starting with + were added</span>
+<span class="w"> </span>another<span class="w"> </span>unchanged
+</pre></div>
+
+<h2 id="212-visual-diff-tools">2.12 Visual Diff Tools</h2>
+<p>Reading diffs in the terminal is fine for small changes. For big ones, configure a visual tool:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>diff.tool<span class="w"> </span>vscode
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>difftool.vscode.cmd<span class="w"> </span><span class="s1">&#39;code --wait --diff $LOCAL $REMOTE&#39;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>difftool.prompt<span class="w"> </span><span class="nb">false</span>
+
+<span class="c1"># Then:</span>
+git<span class="w"> </span>difftool
+git<span class="w"> </span>difftool<span class="w"> </span>--staged
+</pre></div>
+
+<p>Other popular options: Meld, Beyond Compare, KDiff3, P4Merge.</p>
+<h2 id="213-viewing-history">2.13 Viewing History</h2>
+<p>The commit log is your project's story:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log<span class="w">                   </span><span class="c1"># full history, newest first</span>
+git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">         </span><span class="c1"># one commit per line</span>
+git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>--reverse<span class="w">  </span><span class="c1"># oldest first</span>
+git<span class="w"> </span>log<span class="w"> </span>-3<span class="w">                </span><span class="c1"># last 3 commits</span>
+git<span class="w"> </span>log<span class="w"> </span>--stat<span class="w">            </span><span class="c1"># show files changed per commit</span>
+git<span class="w"> </span>log<span class="w"> </span>-p<span class="w">                </span><span class="c1"># show full diff of each commit</span>
+</pre></div>
+
+<p><code>git log --oneline</code> becomes your default — it gives you the commit hash and message in one line:</p>
+<div class="highlight"><pre><span></span>a3f1b9c<span class="w"> </span><span class="o">(</span>HEAD<span class="w"> </span>-&gt;<span class="w"> </span>main<span class="o">)</span><span class="w"> </span>Add<span class="w"> </span>user<span class="w"> </span>authentication
+9d2e7a4<span class="w"> </span>Fix<span class="w"> </span>typo<span class="w"> </span><span class="k">in</span><span class="w"> </span>README
+0c1f8d3<span class="w"> </span>Initial<span class="w"> </span>commit
+</pre></div>
+
+<p>That short hash on the left (<code>a3f1b9c</code>) is enough to identify the commit anywhere.</p>
+<h2 id="214-viewing-a-commit">2.14 Viewing a Commit</h2>
+<p>To see the details of one specific commit:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>show<span class="w"> </span>a3f1b9c<span class="w">          </span><span class="c1"># by hash</span>
+git<span class="w"> </span>show<span class="w"> </span>HEAD<span class="w">             </span><span class="c1"># most recent commit</span>
+git<span class="w"> </span>show<span class="w"> </span>HEAD~1<span class="w">           </span><span class="c1"># one before HEAD</span>
+git<span class="w"> </span>show<span class="w"> </span>HEAD~3<span class="w">           </span><span class="c1"># three before HEAD</span>
+</pre></div>
+
+<p>To see just one file in a past commit:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>show<span class="w"> </span>HEAD~2:file.txt
+</pre></div>
+
+<p><code>HEAD</code> is Git's name for "where you currently are" — usually the latest commit on your current branch. <code>HEAD~N</code> means N commits back.</p>
+<h2 id="215-unstaging-files">2.15 Unstaging Files</h2>
+<p>You staged something you didn't mean to. To unstage (keeping your changes):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>restore<span class="w"> </span>--staged<span class="w"> </span>file.txt
+</pre></div>
+
+<p>(In older Git: <code>git reset HEAD file.txt</code>. Both still work; <code>restore</code> is the newer, clearer command.)</p>
+<h2 id="216-discarding-local-changes">2.16 Discarding Local Changes</h2>
+<p>You modified a file and want to throw away the changes (back to last commit):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>restore<span class="w"> </span>file.txt<span class="w">          </span><span class="c1"># discard changes in working directory</span>
+git<span class="w"> </span>restore<span class="w"> </span>.<span class="w">                 </span><span class="c1"># discard all working directory changes</span>
+</pre></div>
+
+<p><strong>This is destructive — the changes are gone.</strong> Use with care. If the file was previously untracked (new), <code>restore</code> won't remove it; use <code>rm</code> for that, or <code>git clean</code>:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>clean<span class="w"> </span>-fd<span class="w">     </span><span class="c1"># remove all untracked files and directories. CAREFUL.</span>
+git<span class="w"> </span>clean<span class="w"> </span>-n<span class="w">      </span><span class="c1"># dry run: show what would be removed</span>
+</pre></div>
+
+<h2 id="217-restoring-a-file-to-an-earlier-version">2.17 Restoring a File to an Earlier Version</h2>
+<p>If you've already committed a bad change and want to bring back the old version of a file:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>restore<span class="w"> </span>--source<span class="o">=</span>HEAD~1<span class="w"> </span>file.txt
+</pre></div>
+
+<p>This puts the version from 1 commit ago into your working directory. The file is now <em>modified</em> — stage and commit it normally to make the restoration permanent.</p>
+<h2 id="218-creating-snapshots-with-vs-code">2.18 Creating Snapshots with VS Code</h2>
+<p>VS Code has built-in Git support — the Source Control panel (Cmd+Shift+G / Ctrl+Shift+G) shows changes, lets you stage hunks of a file with a click, and commit. Useful for visual people, but learn the commands first so you know what's happening.</p>
+<h2 id="219-cheat-sheet-section-2">2.19 Cheat Sheet — Section 2</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>init<span class="w">                          </span><span class="c1"># create new repo</span>
+git<span class="w"> </span>status<span class="w">                        </span><span class="c1"># what&#39;s changed</span>
+git<span class="w"> </span>status<span class="w"> </span>-s<span class="w">                     </span><span class="c1"># short version</span>
+git<span class="w"> </span>add<span class="w"> </span>&lt;file&gt;<span class="w">                    </span><span class="c1"># stage a file</span>
+git<span class="w"> </span>add<span class="w"> </span>.<span class="w">                         </span><span class="c1"># stage everything</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;message&quot;</span><span class="w">           </span><span class="c1"># commit staged changes</span>
+git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">&quot;message&quot;</span><span class="w">          </span><span class="c1"># stage + commit tracked files</span>
+git<span class="w"> </span>rm<span class="w"> </span>&lt;file&gt;<span class="w">                     </span><span class="c1"># remove file (and stage deletion)</span>
+git<span class="w"> </span>mv<span class="w"> </span>&lt;old&gt;<span class="w"> </span>&lt;new&gt;<span class="w">                </span><span class="c1"># rename</span>
+git<span class="w"> </span>diff<span class="w">                          </span><span class="c1"># unstaged changes</span>
+git<span class="w"> </span>diff<span class="w"> </span>--staged<span class="w">                 </span><span class="c1"># staged changes</span>
+git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">                 </span><span class="c1"># compact history</span>
+git<span class="w"> </span>show<span class="w"> </span>&lt;hash&gt;<span class="w">                   </span><span class="c1"># details of a commit</span>
+git<span class="w"> </span>restore<span class="w"> </span>--staged<span class="w"> </span>&lt;file&gt;<span class="w">       </span><span class="c1"># unstage</span>
+git<span class="w"> </span>restore<span class="w"> </span>&lt;file&gt;<span class="w">                </span><span class="c1"># discard local changes</span>
+</pre></div>
+
+<hr /><div class="section-footer">  <button class="btn-next" data-next="section-2">Start: Browsing History →</button></div></section>
+<section class="course-section" id="section-2" data-section-id="section-2"><div class="section-header-meta">  <span class="section-tag">SECTION 3</span>  <button class="btn-complete" data-complete="section-2"><span class="check">○</span> Mark complete</button></div><h1 class="section-title">Browsing History</h1><p>Now that you can make commits, you need to navigate the history that builds up. This section is everything you can ask Git about your past.</p>
+<h2 id="31-introduction">3.1 Introduction</h2>
+<p>Every commit has:
+- A unique <strong>hash</strong> (e.g., <code>a3f1b9c2...</code>) — 40 hex chars, but the first 7 are enough to identify it.
+- An <strong>author</strong> (name + email).
+- A <strong>timestamp</strong>.
+- A <strong>parent</strong> (the commit before it).
+- A <strong>message</strong>.
+- A <strong>snapshot</strong> of every tracked file at that moment.</p>
+<p>The tools in this section help you query all of that.</p>
+<h2 id="32-getting-a-repository">3.2 Getting a Repository</h2>
+<p>For these exercises, clone any public repo you like — or any repo you have lying around:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/some/repo.git
+<span class="nb">cd</span><span class="w"> </span>repo
+</pre></div>
+
+<p>If you don't have one, just keep practicing in your sandbox repo from Section 2.</p>
+<h2 id="33-viewing-the-history">3.3 Viewing the History</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log
+git<span class="w"> </span>log<span class="w"> </span>--oneline
+git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>--stat<span class="w">       </span><span class="c1"># + which files changed and how many lines</span>
+git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>--patch<span class="w">      </span><span class="c1"># + the actual diff</span>
+git<span class="w"> </span>log<span class="w"> </span>--graph<span class="w"> </span>--oneline<span class="w">      </span><span class="c1"># ASCII branch graph (useful with branches)</span>
+</pre></div>
+
+<p>The graph view becomes critical once you have branches:</p>
+<div class="highlight"><pre><span></span>*<span class="w"> </span>a3f1b9c<span class="w"> </span><span class="o">(</span>HEAD<span class="w"> </span>-&gt;<span class="w"> </span>main<span class="o">)</span><span class="w"> </span>Merge<span class="w"> </span>feature<span class="w"> </span>branch
+<span class="p">|</span><span class="se">\</span>
+<span class="p">|</span><span class="w"> </span>*<span class="w"> </span>9d2e7a4<span class="w"> </span><span class="o">(</span>feature<span class="o">)</span><span class="w"> </span>Add<span class="w"> </span>login<span class="w"> </span>page
+<span class="p">|</span><span class="w"> </span>*<span class="w"> </span>7c1d2b8<span class="w"> </span>Add<span class="w"> </span>/login<span class="w"> </span>route
+<span class="p">|</span>/
+*<span class="w"> </span>0c1f8d3<span class="w"> </span>Initial<span class="w"> </span>commit
+</pre></div>
+
+<h2 id="34-filtering-the-history">3.4 Filtering the History</h2>
+<p>Show commits matching some criteria:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-3<span class="w">                       </span><span class="c1"># last 3 commits</span>
+git<span class="w"> </span>log<span class="w"> </span>--author<span class="o">=</span><span class="s2">&quot;Alice&quot;</span><span class="w">                   </span><span class="c1"># by author</span>
+git<span class="w"> </span>log<span class="w"> </span>--before<span class="o">=</span><span class="s2">&quot;2026-01-01&quot;</span><span class="w">              </span><span class="c1"># before a date</span>
+git<span class="w"> </span>log<span class="w"> </span>--after<span class="o">=</span><span class="s2">&quot;2 weeks ago&quot;</span><span class="w">              </span><span class="c1"># human-readable dates work</span>
+git<span class="w"> </span>log<span class="w"> </span>--grep<span class="o">=</span><span class="s2">&quot;bug&quot;</span><span class="w">                       </span><span class="c1"># commit messages containing &quot;bug&quot;</span>
+git<span class="w"> </span>log<span class="w"> </span>-S<span class="s2">&quot;functionName&quot;</span><span class="w">                   </span><span class="c1"># commits that added/removed this string</span>
+git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>--<span class="w"> </span>file.txt<span class="w">              </span><span class="c1"># commits that touched this file</span>
+</pre></div>
+
+<p><code>-S</code> is incredibly powerful — it searches the <em>content</em> of changes, not commit messages. Use it when hunting for "when did this function get added?"</p>
+<h2 id="35-formatting-the-log-output">3.5 Formatting the Log Output</h2>
+<p>Build your own format with placeholders:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log<span class="w"> </span>--pretty<span class="o">=</span>format:<span class="s2">&quot;%h %an %ar %s&quot;</span>
+<span class="c1"># a3f1b9c Alice 2 days ago Add user authentication</span>
+<span class="c1"># 9d2e7a4 Bob   3 days ago Fix typo in README</span>
+</pre></div>
+
+<p>Useful placeholders:
+- <code>%h</code> short hash · <code>%H</code> full hash
+- <code>%an</code> author name · <code>%ae</code> author email
+- <code>%ad</code> author date · <code>%ar</code> author date relative
+- <code>%s</code> subject (commit message first line)
+- <code>%d</code> ref names (branches, tags)</p>
+<p>There are color codes too, but the default <code>--oneline</code> is usually enough.</p>
+<h2 id="36-aliases">3.6 Aliases</h2>
+<p>You'll type some commands hundreds of times. Save typing with aliases:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.lg<span class="w"> </span><span class="s2">&quot;log --oneline --graph --all&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.st<span class="w"> </span><span class="s2">&quot;status -s&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.unstage<span class="w"> </span><span class="s2">&quot;restore --staged&quot;</span>
+
+<span class="c1"># Then:</span>
+git<span class="w"> </span>lg
+git<span class="w"> </span>st
+git<span class="w"> </span>unstage<span class="w"> </span>file.txt
+</pre></div>
+
+<p>These live in your global config and work in every repo.</p>
+<h2 id="37-viewing-a-commit">3.7 Viewing a Commit</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>show<span class="w"> </span>a3f1b9c<span class="w">                    </span><span class="c1"># full diff + metadata</span>
+git<span class="w"> </span>show<span class="w"> </span>a3f1b9c<span class="w"> </span>--stat<span class="w">             </span><span class="c1"># just which files changed</span>
+git<span class="w"> </span>show<span class="w"> </span>a3f1b9c:path/to/file.txt<span class="w">   </span><span class="c1"># the file&#39;s content at that commit</span>
+</pre></div>
+
+<p><code>HEAD</code> relative references:
+- <code>HEAD</code> — current commit
+- <code>HEAD~1</code> or <code>HEAD^</code> — one before
+- <code>HEAD~5</code> — five before
+- <code>HEAD~1^</code> — same as <code>HEAD~2</code></p>
+<h2 id="38-viewing-the-changes-across-commits">3.8 Viewing the Changes Across Commits</h2>
+<p>Compare two commits:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>diff<span class="w"> </span>HEAD~3..HEAD<span class="w">              </span><span class="c1"># changes in last 3 commits</span>
+git<span class="w"> </span>diff<span class="w"> </span>HEAD~3..HEAD<span class="w"> </span>--<span class="w"> </span>file.txt<span class="w">  </span><span class="c1"># just for one file</span>
+git<span class="w"> </span>diff<span class="w"> </span>branch1..branch2<span class="w">          </span><span class="c1"># branch comparison</span>
+</pre></div>
+
+<p>The <code>..</code> syntax means "from … to …".</p>
+<h2 id="39-checking-out-a-commit">3.9 Checking Out a Commit</h2>
+<p>To time-travel — see your project as it was at a specific commit:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>a3f1b9c
+</pre></div>
+
+<p>This puts you in a state called <strong>detached HEAD</strong>. You can look around, run the code, but if you commit, those commits are <em>not on any branch</em> and easy to lose. Go back to normal:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>main<span class="w">         </span><span class="c1"># or whichever branch you came from</span>
+</pre></div>
+
+<p>(Older Git uses <code>git checkout main</code> for the same thing. <code>switch</code> and <code>restore</code> were introduced in 2019 to clarify the overloaded <code>checkout</code>.)</p>
+<h2 id="310-finding-bugs-using-bisect">3.10 Finding Bugs Using Bisect</h2>
+<p><strong>The killer feature.</strong> If you know a bug exists <em>now</em> but didn't exist 50 commits ago, <code>git bisect</code> does a binary search of your history to find the exact commit that introduced it.</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>bisect<span class="w"> </span>start
+git<span class="w"> </span>bisect<span class="w"> </span>bad<span class="w">                    </span><span class="c1"># current commit is bad</span>
+git<span class="w"> </span>bisect<span class="w"> </span>good<span class="w"> </span>a3f1b9c<span class="w">           </span><span class="c1"># this old commit was good</span>
+
+<span class="c1"># Git checks out the middle commit. Test it.</span>
+<span class="c1"># If it&#39;s bad:</span>
+git<span class="w"> </span>bisect<span class="w"> </span>bad
+<span class="c1"># If it&#39;s good:</span>
+git<span class="w"> </span>bisect<span class="w"> </span>good
+
+<span class="c1"># Repeat. Each step halves the range.</span>
+<span class="c1"># After log2(N) steps you have the culprit.</span>
+
+git<span class="w"> </span>bisect<span class="w"> </span>reset<span class="w">                  </span><span class="c1"># finish, go back to where you started</span>
+</pre></div>
+
+<p>For 1000 commits, you find the bad one in 10 steps. <strong>This single command has saved me hours, many times.</strong></p>
+<h2 id="311-finding-contributors-using-shortlog">3.11 Finding Contributors Using Shortlog</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>shortlog<span class="w"> </span>-sn
+<span class="c1"># 142  Alice</span>
+<span class="c1">#  87  Bob</span>
+<span class="c1">#  12  Carol</span>
+</pre></div>
+
+<p>Number of commits per author. Useful for "who knows this codebase".</p>
+<h2 id="312-viewing-the-history-of-a-file">3.12 Viewing the History of a File</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log<span class="w"> </span>--<span class="w"> </span>file.txt
+git<span class="w"> </span>log<span class="w"> </span>-p<span class="w"> </span>--<span class="w"> </span>file.txt<span class="w">        </span><span class="c1"># with diffs</span>
+git<span class="w"> </span>log<span class="w"> </span>--follow<span class="w"> </span>--<span class="w"> </span>file.txt<span class="w">  </span><span class="c1"># follow through renames</span>
+</pre></div>
+
+<p><code>--follow</code> is essential — without it, the history stops at the file's last rename.</p>
+<h2 id="313-restoring-a-deleted-file">3.13 Restoring a Deleted File</h2>
+<p>You deleted a file 5 commits ago and now want it back:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Find when it was deleted</span>
+git<span class="w"> </span>log<span class="w"> </span>--diff-filter<span class="o">=</span>D<span class="w"> </span>--summary<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>deleted
+
+<span class="c1"># Bring it back from before the delete</span>
+git<span class="w"> </span>checkout<span class="w"> </span>&lt;commit-before-deletion&gt;^<span class="w"> </span>--<span class="w"> </span>path/to/file.txt
+</pre></div>
+
+<p>The <code>^</code> (or <code>~1</code>) is "one before". <code>--</code> separates revisions from paths.</p>
+<h2 id="314-finding-the-author-of-a-line-using-blame">3.14 Finding the Author of a Line Using Blame</h2>
+<p>When you want to know "who wrote this line and why?":</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>blame<span class="w"> </span>file.txt<span class="w">              </span><span class="c1"># author + commit per line</span>
+git<span class="w"> </span>blame<span class="w"> </span>-L<span class="w"> </span><span class="m">10</span>,20<span class="w"> </span>file.txt<span class="w">     </span><span class="c1"># lines 10-20 only</span>
+git<span class="w"> </span>blame<span class="w"> </span>-e<span class="w"> </span>file.txt<span class="w">           </span><span class="c1"># show email instead of name</span>
+</pre></div>
+
+<p><code>blame</code> has a bad name — it's diagnostic, not accusatory. Most often you <code>blame</code> to find the commit that introduced a line, then <code>git show &lt;hash&gt;</code> to read the commit message and understand the intent.</p>
+<h2 id="315-tagging">3.15 Tagging</h2>
+<p>A <strong>tag</strong> is a permanent label on a specific commit. Used almost exclusively for marking releases:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>tag<span class="w"> </span>v1.0.0<span class="w">                          </span><span class="c1"># lightweight tag on current commit</span>
+git<span class="w"> </span>tag<span class="w"> </span>v1.0.0<span class="w"> </span>a3f1b9c<span class="w">                  </span><span class="c1"># tag a specific commit</span>
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v1.0.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release 1.0.0&quot;</span><span class="w">    </span><span class="c1"># annotated tag (preferred)</span>
+git<span class="w"> </span>tag<span class="w">                                 </span><span class="c1"># list all tags</span>
+git<span class="w"> </span>show<span class="w"> </span>v1.0.0<span class="w">                         </span><span class="c1"># see what&#39;s at this tag</span>
+git<span class="w"> </span>tag<span class="w"> </span>-d<span class="w"> </span>v1.0.0<span class="w">                       </span><span class="c1"># delete tag (locally)</span>
+</pre></div>
+
+<p><strong>Lightweight vs annotated:</strong> annotated tags (<code>-a</code>) store an author, date, and message — they're real Git objects. Lightweight tags are just pointers. Use annotated for releases; lightweight for temporary local bookmarks.</p>
+<h2 id="316-cheat-sheet-section-3">3.16 Cheat Sheet — Section 3</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>--graph<span class="w"> </span>--all<span class="w">       </span><span class="c1"># branchy history</span>
+git<span class="w"> </span>log<span class="w"> </span>--author<span class="o">=</span>name<span class="w"> </span>--since<span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="w">   </span><span class="c1"># filter</span>
+git<span class="w"> </span>log<span class="w"> </span>--grep<span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="w"> </span>-S<span class="s2">&quot;text&quot;</span><span class="w">         </span><span class="c1"># search messages and content</span>
+git<span class="w"> </span>log<span class="w"> </span>--pretty<span class="o">=</span>format:<span class="s2">&quot;...&quot;</span><span class="w">         </span><span class="c1"># custom format</span>
+git<span class="w"> </span>show<span class="w"> </span>&lt;hash&gt;<span class="w">                       </span><span class="c1"># commit detail</span>
+git<span class="w"> </span>checkout<span class="w"> </span>&lt;hash&gt;<span class="w">                   </span><span class="c1"># time-travel (read-only)</span>
+git<span class="w"> </span>switch<span class="w"> </span>main<span class="w">                       </span><span class="c1"># back to normal</span>
+git<span class="w"> </span>bisect<span class="w"> </span>start<span class="w"> </span>/<span class="w"> </span>good<span class="w"> </span>/<span class="w"> </span>bad<span class="w">         </span><span class="c1"># binary-search for bugs</span>
+git<span class="w"> </span>blame<span class="w"> </span>file<span class="w">                        </span><span class="c1"># line-level history</span>
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v1.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="w">              </span><span class="c1"># mark a release</span>
+</pre></div>
+
+<hr /><div class="section-footer">  <button class="btn-next" data-next="section-3">Start: Branching →</button></div></section>
+<section class="course-section" id="section-3" data-section-id="section-3"><div class="section-header-meta">  <span class="section-tag">SECTION 4</span>  <button class="btn-complete" data-complete="section-3"><span class="check">○</span> Mark complete</button></div><h1 class="section-title">Branching</h1><p>The heart of Git. Branching lets you work on multiple things in parallel without them stepping on each other.</p>
+<h2 id="41-what-are-branches">4.1 What are Branches?</h2>
+<p>A <strong>branch</strong> is a pointer to a commit. That's it. Not a copy of files, not a clone of the repo — just a moveable label.</p>
+<div class="highlight"><pre><span></span>main:<span class="w">    </span>a3f1b9c<span class="w"> </span>—<span class="w"> </span>9d2e7a4<span class="w"> </span>—<span class="w"> </span>7c1d2b8<span class="w">        </span>←<span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="w"> </span>points<span class="w"> </span>here
+<span class="w">                                  </span>↑
+<span class="w">                              </span><span class="o">(</span>current<span class="o">)</span>
+
+feature:<span class="w">  </span>a3f1b9c<span class="w"> </span>—<span class="w"> </span>9d2e7a4<span class="w"> </span>—<span class="w"> </span>7c1d2b8<span class="w"> </span>—<span class="w"> </span>fe1ab2c<span class="w">   </span>←<span class="w"> </span><span class="s2">&quot;feature&quot;</span><span class="w"> </span>points<span class="w"> </span>here
+<span class="w">                                  </span>↑
+<span class="w">                              </span>shared<span class="w"> </span>with<span class="w"> </span>main
+</pre></div>
+
+<p>When you commit on <code>feature</code>, the <code>feature</code> pointer moves forward but <code>main</code> stays put. This is why branches are essentially free in Git — you're not copying files, just making a new pointer.</p>
+<h2 id="42-working-with-branches">4.2 Working with Branches</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>branch<span class="w">                          </span><span class="c1"># list local branches; * marks current</span>
+git<span class="w"> </span>branch<span class="w"> </span>-a<span class="w">                       </span><span class="c1"># include remote branches</span>
+git<span class="w"> </span>branch<span class="w"> </span>feature<span class="w">                  </span><span class="c1"># create branch (but don&#39;t switch)</span>
+git<span class="w"> </span>switch<span class="w"> </span>feature<span class="w">                  </span><span class="c1"># switch to it</span>
+git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>feature<span class="w">               </span><span class="c1"># create AND switch in one step</span>
+git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>feature<span class="w">               </span><span class="c1"># delete (safe — refuses if unmerged)</span>
+git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>feature<span class="w">               </span><span class="c1"># force delete</span>
+git<span class="w"> </span>branch<span class="w"> </span>-m<span class="w"> </span>old-name<span class="w"> </span>new-name<span class="w">     </span><span class="c1"># rename</span>
+</pre></div>
+
+<p>(Older Git: <code>git checkout -b feature</code> was the create-and-switch idiom. <code>switch -c</code> is the modern equivalent.)</p>
+<p>The <code>*</code> in <code>git branch</code> shows where you are:</p>
+<div class="highlight"><pre><span></span><span class="w">  </span>feature
+*<span class="w"> </span>main
+</pre></div>
+
+<h2 id="43-comparing-branches">4.3 Comparing Branches</h2>
+<p>What's on <code>feature</code> that isn't on <code>main</code>?</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log<span class="w"> </span>main..feature<span class="w">              </span><span class="c1"># commits in feature, not in main</span>
+git<span class="w"> </span>diff<span class="w"> </span>main..feature<span class="w">             </span><span class="c1"># actual code differences</span>
+git<span class="w"> </span>diff<span class="w"> </span>main..feature<span class="w"> </span>--<span class="w"> </span>file.txt<span class="w"> </span><span class="c1"># just one file</span>
+</pre></div>
+
+<h2 id="44-stashing">4.4 Stashing</h2>
+<p>You're working on something, and you need to switch branches <em>right now</em> — but you don't want to commit your half-finished work. Stash it:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>stash<span class="w">                          </span><span class="c1"># save current changes (working dir + staged)</span>
+git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;WIP: login fix&quot;</span><span class="w"> </span><span class="c1"># with a message</span>
+
+<span class="c1"># do other stuff, switch branches, whatever</span>
+
+git<span class="w"> </span>stash<span class="w"> </span>list<span class="w">                     </span><span class="c1"># see your stashes</span>
+<span class="c1"># stash@{0}: WIP: login fix</span>
+<span class="c1"># stash@{1}: WIP: earlier thing</span>
+
+git<span class="w"> </span>stash<span class="w"> </span>pop<span class="w">                      </span><span class="c1"># apply most recent and remove from stash list</span>
+git<span class="w"> </span>stash<span class="w"> </span>apply<span class="w"> </span>stash@<span class="o">{</span><span class="m">1</span><span class="o">}</span><span class="w">          </span><span class="c1"># apply specific one, keep in list</span>
+git<span class="w"> </span>stash<span class="w"> </span>drop<span class="w"> </span>stash@<span class="o">{</span><span class="m">1</span><span class="o">}</span><span class="w">           </span><span class="c1"># delete a stash without applying</span>
+git<span class="w"> </span>stash<span class="w"> </span>clear<span class="w">                    </span><span class="c1"># delete all stashes</span>
+</pre></div>
+
+<p>The stash is a stack — <code>pop</code> takes the top. Use <code>apply</code> + <code>drop</code> if you want to apply something other than the top.</p>
+<p><code>git stash</code> only stashes tracked files by default. To include untracked:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>stash<span class="w"> </span>-u
+</pre></div>
+
+<h2 id="45-merging">4.5 Merging</h2>
+<p>Combining work from one branch into another.</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>merge<span class="w"> </span>feature<span class="w">           </span><span class="c1"># bring feature&#39;s changes into main</span>
+</pre></div>
+
+<p>Git tries to merge automatically. If the two branches changed different things, it just works. If they changed the same lines, you get a <strong>conflict</strong> (covered in 4.8).</p>
+<p>There are several merge strategies:</p>
+<h2 id="46-fast-forward-merges">4.6 Fast-Forward Merges</h2>
+<p>If <code>main</code> hasn't moved since you branched off, Git just slides the <code>main</code> pointer forward — no merge commit needed.</p>
+<div class="highlight"><pre><span></span>Before:
+main:<span class="w">     </span>A<span class="w"> </span>—<span class="w"> </span>B
+<span class="w">              </span><span class="se">\</span>
+feature:<span class="w">       </span>C<span class="w"> </span>—<span class="w"> </span>D<span class="w">       </span><span class="o">(</span>main<span class="w"> </span>is<span class="w"> </span>at<span class="w"> </span>B<span class="p">;</span><span class="w"> </span>feature<span class="w"> </span>added<span class="w"> </span>C,<span class="w"> </span>D<span class="o">)</span>
+
+After:<span class="w"> </span>git<span class="w"> </span>merge<span class="w"> </span>feature<span class="w"> </span><span class="o">(</span>fast-forward<span class="o">)</span>
+main:<span class="w">     </span>A<span class="w"> </span>—<span class="w"> </span>B<span class="w"> </span>—<span class="w"> </span>C<span class="w"> </span>—<span class="w"> </span>D<span class="w">    </span><span class="o">(</span>main<span class="w"> </span>pointer<span class="w"> </span>just<span class="w"> </span>moved<span class="w"> </span>forward<span class="o">)</span>
+</pre></div>
+
+<p>Result: linear history, no extra merge commit. Some teams love this; others want to preserve the fact that work happened on a branch.</p>
+<p>Force a merge commit even if fast-forward is possible:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>merge<span class="w"> </span>--no-ff<span class="w"> </span>feature
+</pre></div>
+
+<h2 id="47-three-way-merges">4.7 Three-Way Merges</h2>
+<p>When both branches have moved since they diverged, Git creates a new "merge commit" that has <em>two</em> parents:</p>
+<div class="highlight"><pre><span></span>Before:
+<span class="w">        </span>A<span class="w"> </span>—<span class="w"> </span>B<span class="w"> </span>—<span class="w"> </span>E<span class="w">             </span>←<span class="w"> </span>main
+<span class="w">             </span><span class="se">\</span>
+<span class="w">              </span>C<span class="w"> </span>—<span class="w"> </span>D<span class="w">            </span>←<span class="w"> </span>feature
+
+After:<span class="w"> </span>git<span class="w"> </span>merge<span class="w"> </span>feature
+<span class="w">        </span>A<span class="w"> </span>—<span class="w"> </span>B<span class="w"> </span>—<span class="w"> </span>E<span class="w"> </span>—<span class="w"> </span>M<span class="w">          </span>←<span class="w"> </span>main<span class="w"> </span><span class="o">(</span>M<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>merge<span class="w"> </span>commit<span class="o">)</span>
+<span class="w">             </span><span class="se">\ </span><span class="w">    </span>/
+<span class="w">              </span>C<span class="w"> </span>—<span class="w"> </span>D
+</pre></div>
+
+<p>Commit <code>M</code> records "I'm the result of merging feature into main." The history preserves the branching structure.</p>
+<h2 id="48-merge-conflicts">4.8 Merge Conflicts</h2>
+<p>If both branches edited the same lines, Git can't decide which version wins. You'll see:</p>
+<div class="highlight"><pre><span></span>Auto-merging<span class="w"> </span>file.txt
+CONFLICT<span class="w"> </span><span class="o">(</span>content<span class="o">)</span>:<span class="w"> </span>Merge<span class="w"> </span>conflict<span class="w"> </span><span class="k">in</span><span class="w"> </span>file.txt
+Automatic<span class="w"> </span>merge<span class="w"> </span>failed<span class="p">;</span><span class="w"> </span>fix<span class="w"> </span>conflicts<span class="w"> </span>and<span class="w"> </span><span class="k">then</span><span class="w"> </span>commit<span class="w"> </span>the<span class="w"> </span>result.
+</pre></div>
+
+<p>Open the file. Git inserts conflict markers:</p>
+<div class="highlight"><pre><span></span><span class="o">&lt;&lt;&lt;&lt;&lt;&lt;</span>&lt;<span class="w"> </span>HEAD
+This<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>line<span class="w"> </span>from<span class="w"> </span><span class="nv">main</span>
+<span class="o">=======</span>
+This<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>line<span class="w"> </span>from<span class="w"> </span>feature
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;<span class="w"> </span>feature
+</pre></div>
+
+<p>Edit the file to what you want (delete the markers), then:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>file.txt
+git<span class="w"> </span>commit<span class="w">                </span><span class="c1"># finishes the merge</span>
+</pre></div>
+
+<p>To bail out of the merge entirely:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>merge<span class="w"> </span>--abort
+</pre></div>
+
+<h2 id="49-graphical-merge-tools">4.9 Graphical Merge Tools</h2>
+<p>When conflicts get complex, use a visual tool:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>merge.tool<span class="w"> </span>vscode
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>mergetool.vscode.cmd<span class="w"> </span><span class="s1">&#39;code --wait $MERGED&#39;</span>
+
+<span class="c1"># When you have conflicts:</span>
+git<span class="w"> </span>mergetool
+</pre></div>
+
+<p>Or use VS Code's built-in conflict UI — click "Accept Current Change", "Accept Incoming", "Accept Both", or just edit manually.</p>
+<h2 id="410-aborting-a-merge">4.10 Aborting a Merge</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>merge<span class="w"> </span>--abort
+</pre></div>
+
+<p>Brings everything back to the state before <code>git merge</code>. Safe anytime before you finalize the merge with a commit.</p>
+<h2 id="411-undoing-a-faulty-merge">4.11 Undoing a Faulty Merge</h2>
+<p>You finished the merge, but it was wrong. Two options:</p>
+<p><strong>Option A — Reset (rewrites history; only safe if not pushed):</strong></p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1<span class="w">     </span><span class="c1"># go back one commit</span>
+</pre></div>
+
+<p><strong>Option B — Revert (safe even if pushed):</strong></p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>revert<span class="w"> </span>-m<span class="w"> </span><span class="m">1</span><span class="w"> </span>HEAD<span class="w">        </span><span class="c1"># creates a new commit that undoes the merge</span>
+</pre></div>
+
+<p><code>-m 1</code> tells Git which parent of the merge to use as the "mainline" (the one to keep). Almost always <code>1</code>.</p>
+<p>The golden rule: <strong>once you push, prefer revert over reset.</strong> More on this in Section 6.</p>
+<h2 id="412-squash-merging">4.12 Squash Merging</h2>
+<p>Take all the messy little commits on a feature branch and merge them into <code>main</code> as a <em>single</em> clean commit:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>merge<span class="w"> </span>--squash<span class="w"> </span>feature
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add login feature&quot;</span>
+</pre></div>
+
+<p>Result: <code>main</code> shows one tidy commit instead of "WIP", "more work", "fix", "actually fix it", "ok working now". Common pattern for PR-based workflows.</p>
+<p>Downside: you lose the granular history of how the feature was built. For exploratory work, that's a feature. For a long-running effort, you might want to keep the commits.</p>
+<h2 id="413-rebasing">4.13 Rebasing</h2>
+<p><code>rebase</code> is the alternative to <code>merge</code>. Instead of creating a merge commit, rebase <strong>moves your branch's commits on top of another branch</strong> — replaying them one by one.</p>
+<div class="highlight"><pre><span></span>Before:
+<span class="w">        </span>A<span class="w"> </span>—<span class="w"> </span>B<span class="w"> </span>—<span class="w"> </span>E<span class="w">              </span>←<span class="w"> </span>main
+<span class="w">             </span><span class="se">\</span>
+<span class="w">              </span>C<span class="w"> </span>—<span class="w"> </span>D<span class="w">             </span>←<span class="w"> </span>feature
+
+After:<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>feature<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>rebase<span class="w"> </span>main
+<span class="w">        </span>A<span class="w"> </span>—<span class="w"> </span>B<span class="w"> </span>—<span class="w"> </span>E<span class="w"> </span>—<span class="w"> </span>C<span class="s1">&#39; — D&#39;</span><span class="w">    </span>←<span class="w"> </span>feature<span class="w"> </span><span class="o">(</span>C<span class="s1">&#39;, D&#39;</span><span class="w"> </span>are<span class="w"> </span>new<span class="w"> </span>commits<span class="w"> </span>with<span class="w"> </span>same<span class="w"> </span>changes<span class="o">)</span>
+</pre></div>
+
+<p>Note <code>C'</code> and <code>D'</code> — they have new hashes because their parent changed. The original C and D still exist briefly (recoverable from <code>reflog</code>), but for practical purposes they're gone.</p>
+<p>Why use it? <strong>Linear history.</strong> No merge commits cluttering the log. <code>git log --oneline</code> reads as a clean sequence.</p>
+<p>When to use it:
+- ✅ On your local, unpushed branches.
+- ✅ To keep a long-running feature branch up to date with main.
+- ❌ On commits that have been pushed and pulled by others. <strong>You'll rewrite their history under their feet.</strong></p>
+<p>The Golden Rule: <strong>never rebase commits that exist outside your local repository.</strong></p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>feature
+git<span class="w"> </span>rebase<span class="w"> </span>main
+<span class="c1"># (resolve any conflicts; git add; git rebase --continue)</span>
+git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>merge<span class="w"> </span>feature<span class="w">             </span><span class="c1"># now this is a fast-forward</span>
+</pre></div>
+
+<p>If you hit conflicts during rebase:</p>
+<div class="highlight"><pre><span></span><span class="c1"># edit the conflicting file, then:</span>
+git<span class="w"> </span>add<span class="w"> </span>file.txt
+git<span class="w"> </span>rebase<span class="w"> </span>--continue
+
+<span class="c1"># or, give up:</span>
+git<span class="w"> </span>rebase<span class="w"> </span>--abort
+</pre></div>
+
+<h2 id="414-cherry-picking">4.14 Cherry Picking</h2>
+<p>Take one specific commit from another branch and apply it to yours:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>cherry-pick<span class="w"> </span>a3f1b9c
+</pre></div>
+
+<p>Useful when:
+- You wrote a bug fix on a feature branch and want to apply it to main <em>now</em>, without merging the rest of the feature.
+- Backporting a fix to an old release branch.</p>
+<h2 id="415-picking-a-file-from-another-branch">4.15 Picking a File from Another Branch</h2>
+<p>You don't even need a commit — grab a single file as it exists on another branch:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>feature<span class="w"> </span>--<span class="w"> </span>path/to/file.txt
+<span class="c1"># This stages the file. Commit normally.</span>
+</pre></div>
+
+<p>(Modern syntax: <code>git restore --source=feature -- path/to/file.txt</code>)</p>
+<h3>🏋️ Exercise 4.15</h3>
+<blockquote>
+<p>Create a branch <code>experiment</code>, make 2 commits on it, then realize you only want to bring <strong>one</strong> of those commits back to <code>main</code>. How do you do it?</p>
+</blockquote>
+<details><summary>Solution</summary>
+
+
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>log<span class="w"> </span>experiment<span class="w"> </span>--oneline<span class="w">    </span><span class="c1"># find the hash of the commit you want</span>
+git<span class="w"> </span>cherry-pick<span class="w"> </span>&lt;hash&gt;
+</pre></div>
+
+
+
+You can also cherry-pick a range:
+
+<div class="highlight"><pre><span></span>git<span class="w"> </span>cherry-pick<span class="w"> </span>start-hash..end-hash
+</pre></div>
+
+
+</details>
+
+<h2 id="416-cheat-sheet-section-4">4.16 Cheat Sheet — Section 4</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>branch<span class="w">                          </span><span class="c1"># list</span>
+git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>feature<span class="w">               </span><span class="c1"># create + switch</span>
+git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>merge<span class="w"> </span>feature<span class="w">                   </span><span class="c1"># merge into current</span>
+git<span class="w"> </span>merge<span class="w"> </span>--squash<span class="w"> </span>feature<span class="w">          </span><span class="c1"># combine into one commit</span>
+git<span class="w"> </span>merge<span class="w"> </span>--no-ff<span class="w"> </span>feature<span class="w">           </span><span class="c1"># force merge commit</span>
+git<span class="w"> </span>merge<span class="w"> </span>--abort<span class="w">                   </span><span class="c1"># bail out</span>
+git<span class="w"> </span>rebase<span class="w"> </span>main<span class="w">                     </span><span class="c1"># replay current onto main</span>
+git<span class="w"> </span>cherry-pick<span class="w"> </span>&lt;hash&gt;<span class="w">              </span><span class="c1"># apply one commit</span>
+git<span class="w"> </span>stash<span class="w"> </span>/<span class="w"> </span>pop<span class="w"> </span>/<span class="w"> </span>list<span class="w"> </span>/<span class="w"> </span>drop<span class="w">       </span><span class="c1"># temporary save</span>
+git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>feature<span class="w">               </span><span class="c1"># delete branch</span>
+</pre></div>
+
+<hr /><div class="section-footer">  <button class="btn-next" data-next="section-4">Start: Collaboration →</button></div></section>
+<section class="course-section" id="section-4" data-section-id="section-4"><div class="section-header-meta">  <span class="section-tag">SECTION 5</span>  <button class="btn-complete" data-complete="section-4"><span class="check">○</span> Mark complete</button></div><h1 class="section-title">Collaboration</h1><p>Working with other people requires <strong>remote repositories</strong> — copies of the project on a server everyone can reach. GitHub, GitLab, and Bitbucket are the most popular hosts, but the Git mechanics are identical regardless.</p>
+<h2 id="51-workflows">5.1 Workflows</h2>
+<p>Two common patterns:</p>
+<p><strong>Centralized workflow:</strong>
+- One shared remote repo.
+- Everyone clones it, pushes branches, opens PRs.
+- Common in companies. Simple.</p>
+<p><strong>Forking workflow:</strong>
+- The main repo is owned by someone (e.g., an open-source maintainer).
+- Contributors <strong>fork</strong> (make a copy on the server) and push to their fork.
+- Open a PR from your fork to the main repo.
+- Common in open source.</p>
+<p>Both use the same commands; the difference is permissions.</p>
+<h2 id="52-creating-a-github-repository">5.2 Creating a GitHub Repository</h2>
+<p>On github.com → New Repository → fill in name, public/private, click Create. Don't initialize with a README if you're pushing an existing local repo — it'll cause a divergence on the first push.</p>
+<p>To connect a local repo to GitHub:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://github.com/you/repo.git
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+
+<ul>
+<li><code>origin</code> is the conventional name for "the main remote" — you can use anything.</li>
+<li><code>-u</code> (upstream) sets the default remote+branch so future <code>git push</code> and <code>git pull</code> know what to do.</li>
+</ul>
+<h2 id="53-cloning-a-repository">5.3 Cloning a Repository</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/user/repo.git
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/user/repo.git<span class="w"> </span>my-folder<span class="w">    </span><span class="c1"># into a specific folder</span>
+</pre></div>
+
+<p>This:
+1. Downloads everything (all branches, all history).
+2. Sets up <code>origin</code> to point at the source URL.
+3. Checks out the default branch.</p>
+<h2 id="54-fetching">5.4 Fetching</h2>
+<p><code>fetch</code> downloads new commits from the remote but <strong>doesn't change your working files</strong>.</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>fetch<span class="w">                     </span><span class="c1"># all remotes, all branches</span>
+git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w">              </span><span class="c1"># just origin</span>
+git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span>main<span class="w">         </span><span class="c1"># just origin&#39;s main</span>
+</pre></div>
+
+<p>After fetching, you can see what's new with:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>log<span class="w"> </span>HEAD..origin/main<span class="w"> </span>--oneline<span class="w">   </span><span class="c1"># commits on remote that you don&#39;t have</span>
+</pre></div>
+
+<p>Then either merge or rebase:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>merge<span class="w"> </span>origin/main
+<span class="c1"># or</span>
+git<span class="w"> </span>rebase<span class="w"> </span>origin/main
+</pre></div>
+
+<h2 id="55-pulling">5.5 Pulling</h2>
+<p><code>pull</code> = <code>fetch</code> + <code>merge</code> (by default) or <code>fetch</code> + <code>rebase</code> (with <code>--rebase</code>).</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>pull<span class="w">                      </span><span class="c1"># fetch + merge</span>
+git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">             </span><span class="c1"># fetch + rebase (cleaner history)</span>
+</pre></div>
+
+<p>Make <code>--rebase</code> the default for your repo:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>pull.rebase<span class="w"> </span><span class="nb">true</span>
+</pre></div>
+
+<p>Or globally:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>pull.rebase<span class="w"> </span><span class="nb">true</span>
+</pre></div>
+
+<p>This is a controversial setting — some teams prefer merge commits. Pick a policy and stick with it.</p>
+<h2 id="56-pushing">5.6 Pushing</h2>
+<p>Send your local commits to the remote:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w">                      </span><span class="c1"># push current branch to its upstream</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feature<span class="w">       </span><span class="c1"># push feature to origin</span>
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature<span class="w">    </span><span class="c1"># push and set upstream (first time)</span>
+</pre></div>
+
+<p>If the remote has commits you don't have, <code>push</code> is rejected:</p>
+<div class="highlight"><pre><span></span>!<span class="w"> </span><span class="o">[</span>rejected<span class="o">]</span><span class="w">        </span>main<span class="w"> </span>-&gt;<span class="w"> </span>main<span class="w"> </span><span class="o">(</span>fetch<span class="w"> </span>first<span class="o">)</span>
+</pre></div>
+
+<p>The fix: <code>git pull</code> first, resolve any conflicts, then <code>git push</code>.</p>
+<p><strong>Never use <code>--force</code> (<code>-f</code>) on shared branches.</strong> It overwrites the remote history, deleting commits other people may have based work on. If you absolutely must force-push (e.g., to clean up your own feature branch after a rebase), use:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease<span class="w">   </span><span class="c1"># safer: refuses if someone else pushed since</span>
+</pre></div>
+
+<h2 id="57-storing-credentials">5.7 Storing Credentials</h2>
+<p>GitHub deprecated password auth in 2021. Options:</p>
+<p><strong>Personal Access Token (PAT):</strong> generate one in GitHub Settings → Developer Settings → Personal Access Tokens. Use it as your password. Git will cache it via the OS keychain on macOS/Windows.</p>
+<p><strong>SSH keys:</strong> generate <code>ssh-keygen -t ed25519</code>, add the public key to GitHub Settings → SSH Keys. Use SSH URLs (<code>git@github.com:user/repo.git</code> instead of <code>https://...</code>). No tokens to manage.</p>
+<p><strong>GitHub CLI:</strong> <code>brew install gh &amp;&amp; gh auth login</code> — handles credentials for you.</p>
+<p>Most developers settle on SSH for convenience.</p>
+<h2 id="58-sharing-tags">5.8 Sharing Tags</h2>
+<p>Tags don't get pushed automatically:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v1.0.0<span class="w">          </span><span class="c1"># one tag</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--tags<span class="w">          </span><span class="c1"># all tags</span>
+git<span class="w"> </span>push<span class="w"> </span>--follow-tags<span class="w">          </span><span class="c1"># push tags reachable from pushed commits</span>
+</pre></div>
+
+<p>To delete a tag from the remote:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>v1.0.0
+</pre></div>
+
+<h2 id="59-releases">5.9 Releases</h2>
+<p>A <strong>release</strong> is a GitHub/GitLab feature built on top of tags. Push a tag, then on GitHub → Releases → Draft New Release → pick the tag → add release notes and any binary attachments.</p>
+<p>From the CLI:</p>
+<div class="highlight"><pre><span></span>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>v1.0.0<span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;Initial release&quot;</span>
+</pre></div>
+
+<h2 id="510-sharing-branches">5.10 Sharing Branches</h2>
+<p>To make a local branch available on the remote:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>new-feature
+<span class="c1"># work, commit</span>
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>new-feature
+</pre></div>
+
+<p>To check out a branch someone else pushed:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>fetch
+git<span class="w"> </span>switch<span class="w"> </span>some-feature<span class="w">       </span><span class="c1"># Git auto-creates local branch tracking origin/some-feature</span>
+</pre></div>
+
+<p>List remote branches:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>branch<span class="w"> </span>-r
+</pre></div>
+
+<p>Delete a remote branch (e.g., after merging a PR):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>old-feature
+</pre></div>
+
+<h2 id="511-collaboration-workflow">5.11 Collaboration Workflow</h2>
+<p>Typical day-to-day:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Start of the day — get latest changes</span>
+git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>pull
+
+<span class="c1"># Start a feature</span>
+git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>add-search
+
+<span class="c1"># Work, commit, work, commit</span>
+git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add search input&quot;</span>
+git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Wire search to API&quot;</span>
+
+<span class="c1"># Push your branch</span>
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>add-search
+
+<span class="c1"># Open a Pull Request on GitHub</span>
+<span class="c1"># Wait for review, address feedback (more commits + push)</span>
+<span class="c1"># After PR is merged, clean up:</span>
+git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>pull
+git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>add-search
+</pre></div>
+
+<h2 id="512-pull-requests">5.12 Pull Requests</h2>
+<p>A <strong>pull request</strong> (PR) — also called <strong>merge request</strong> on GitLab — is a request to merge your branch into another. It's not a Git feature; it's a platform feature. PRs add:</p>
+<ul>
+<li>A web UI for code review (line-by-line comments).</li>
+<li>A discussion thread.</li>
+<li>CI/CD checks (tests must pass).</li>
+<li>Required approvals before merging.</li>
+</ul>
+<p>The actual merge happens with <code>git merge</code> under the hood when you click "Merge". Most teams configure GitHub to use <strong>squash merge</strong> or <strong>rebase merge</strong> for clean linear history.</p>
+<p>Best practices:
+- Keep PRs small. &lt;400 lines is the sweet spot for review quality.
+- One concern per PR.
+- A clear title and description with context.
+- Self-review before requesting reviewers.</p>
+<h2 id="513-resolving-conflicts">5.13 Resolving Conflicts</h2>
+<p>When a PR can't auto-merge, you'll see "This branch has conflicts that must be resolved" on GitHub.</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>your-branch
+git<span class="w"> </span>fetch<span class="w"> </span>origin
+git<span class="w"> </span>merge<span class="w"> </span>origin/main<span class="w">          </span><span class="c1"># or: git rebase origin/main</span>
+<span class="c1"># resolve conflicts in the editor</span>
+git<span class="w"> </span>add<span class="w"> </span>&lt;resolved-files&gt;
+git<span class="w"> </span>commit<span class="w">                     </span><span class="c1"># if merging</span>
+git<span class="w"> </span>rebase<span class="w"> </span>--continue<span class="w">          </span><span class="c1"># if rebasing</span>
+git<span class="w"> </span>push<span class="w">                       </span><span class="c1"># push the resolution</span>
+<span class="c1"># (use --force-with-lease if you rebased)</span>
+</pre></div>
+
+<h2 id="514-issues-labels-milestones">5.14 Issues, Labels, Milestones</h2>
+<p>GitHub features for tracking work:</p>
+<ul>
+<li><strong>Issues:</strong> bug reports, feature requests, tasks. Each has a number (#123) referenceable in commits ("Fixes #123" in a commit message auto-closes the issue when merged to main).</li>
+<li><strong>Labels:</strong> colored tags (<code>bug</code>, <code>enhancement</code>, <code>good first issue</code>).</li>
+<li><strong>Milestones:</strong> group issues into a release or sprint.</li>
+</ul>
+<p>These don't affect Git itself, but they're how teams coordinate. Worth learning the conventions in whatever team you join.</p>
+<h2 id="515-contributing-to-open-source">5.15 Contributing to Open Source</h2>
+<p>The standard flow:</p>
+<ol>
+<li><strong>Fork</strong> the repo on GitHub (button top-right). Creates a copy under your account.</li>
+<li><strong>Clone your fork</strong> locally: <code>git clone https://github.com/you/repo.git</code>.</li>
+<li>Add the <strong>upstream</strong> remote so you can pull in changes from the original:
+   <code>bash
+   git remote add upstream https://github.com/original-owner/repo.git</code></li>
+<li>Create a feature branch: <code>git switch -c fix-something</code>.</li>
+<li>Make changes, commit, push to <strong>your fork</strong>: <code>git push -u origin fix-something</code>.</li>
+<li>Open a PR from your branch to the original repo. Use the GitHub UI button "Compare &amp; pull request".</li>
+</ol>
+<h2 id="516-keeping-a-forked-repository-up-to-date">5.16 Keeping a Forked Repository Up to Date</h2>
+<p>Your fork doesn't auto-sync with upstream. Periodically:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>fetch<span class="w"> </span>upstream
+git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>merge<span class="w"> </span>upstream/main<span class="w">         </span><span class="c1"># or rebase</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main<span class="w">            </span><span class="c1"># update your fork on GitHub</span>
+</pre></div>
+
+<p>GitHub now offers a "Sync fork" button in the UI that does this from the web.</p>
+<h2 id="517-cheat-sheet-section-5">5.17 Cheat Sheet — Section 5</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;url&gt;
+git<span class="w"> </span>remote<span class="w"> </span>-v<span class="w">                       </span><span class="c1"># list remotes</span>
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>&lt;url&gt;
+git<span class="w"> </span>fetch<span class="w">                           </span><span class="c1"># download, don&#39;t merge</span>
+git<span class="w"> </span>pull<span class="w">                            </span><span class="c1"># fetch + merge</span>
+git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                   </span><span class="c1"># fetch + rebase</span>
+git<span class="w"> </span>push<span class="w">                            </span><span class="c1"># send commits</span>
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>branch<span class="w">           </span><span class="c1"># first push, set upstream</span>
+git<span class="w"> </span>push<span class="w"> </span>--force-with-lease<span class="w">         </span><span class="c1"># safer force-push</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--tags<span class="w">              </span><span class="c1"># push tags</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>branch<span class="w">     </span><span class="c1"># delete remote branch</span>
+git<span class="w"> </span>branch<span class="w"> </span>-r<span class="w">                       </span><span class="c1"># list remote branches</span>
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>&lt;url&gt;<span class="w">       </span><span class="c1"># for forks</span>
+</pre></div>
+
+<hr /><div class="section-footer">  <button class="btn-next" data-next="section-5">Start: Rewriting History →</button></div></section>
+<section class="course-section" id="section-5" data-section-id="section-5"><div class="section-header-meta">  <span class="section-tag">SECTION 6</span>  <button class="btn-complete" data-complete="section-5"><span class="check">○</span> Mark complete</button></div><h1 class="section-title">Rewriting History</h1><p>The advanced stuff. You can edit, reorder, combine, and remove past commits. With great power comes great risk — this section comes with the most important rule in Git.</p>
+<h2 id="61-why-rewrite-history">6.1 Why Rewrite History?</h2>
+<p>Real-world reasons:</p>
+<ul>
+<li>You committed a password by mistake.</li>
+<li>Your commit message has a typo.</li>
+<li>You made 10 messy "WIP" commits and want them as 1 clean one.</li>
+<li>You accidentally committed to the wrong branch.</li>
+<li>A reviewer wants you to split one big commit into smaller ones.</li>
+</ul>
+<p>Rewriting history is what makes Git feel like a writer's tool: drafts can be cleaned up before final publication.</p>
+<h2 id="62-the-golden-rule-of-rewriting-history">6.2 The Golden Rule of Rewriting History</h2>
+<blockquote>
+<p><strong>Never rewrite history that has been shared.</strong></p>
+</blockquote>
+<p>If you've pushed a commit and someone else has pulled it, rewriting that commit creates a divergence. Their next pull will get confused, and "fixing" it usually means losing work.</p>
+<p><strong>Safe to rewrite:</strong>
+- Commits only in your local repo.
+- Commits on your personal feature branch that no one else uses (and that you control).</p>
+<p><strong>Dangerous to rewrite:</strong>
+- Anything on <code>main</code> / <code>develop</code> / <code>release</code> after pushing.
+- Branches other people are working from.</p>
+<p>If you must change shared history, communicate first — "Everyone, I'm rewriting <code>feature-X</code>, please re-clone or hard reset."</p>
+<h2 id="63-example-of-a-bad-history">6.3 Example of a Bad History</h2>
+<div class="highlight"><pre><span></span>*<span class="w"> </span>a3f1b9c<span class="w"> </span>WIP
+*<span class="w"> </span>9d2e7a4<span class="w"> </span>more<span class="w"> </span>stuff
+*<span class="w"> </span>7c1d2b8<span class="w"> </span>fix
+*<span class="w"> </span>0c1f8d3<span class="w"> </span>fix<span class="w"> </span>again
+*<span class="w"> </span>fe2ab1c<span class="w"> </span>WIP<span class="w"> </span><span class="m">2</span>
+*<span class="w"> </span>8d4c5e6<span class="w"> </span>ok<span class="w"> </span>working
+*<span class="w"> </span>1a2b3c4<span class="w"> </span>oops
+*<span class="w"> </span>5f6e7d8<span class="w"> </span>actual<span class="w"> </span>feature<span class="w"> </span>start
+</pre></div>
+
+<p>Useless for code review or <code>git bisect</code>. Let's learn the tools to fix it.</p>
+<h2 id="64-undoing-commits">6.4 Undoing Commits</h2>
+<p>You committed something, then realized you didn't want to. There are three "reset" modes:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>reset<span class="w"> </span>--soft<span class="w"> </span>HEAD~1<span class="w">     </span><span class="c1"># undo commit, keep changes staged</span>
+git<span class="w"> </span>reset<span class="w"> </span>--mixed<span class="w"> </span>HEAD~1<span class="w">    </span><span class="c1"># undo commit, keep changes (unstaged) — DEFAULT</span>
+git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1<span class="w">     </span><span class="c1"># undo commit AND throw away the changes</span>
+</pre></div>
+
+<ul>
+<li><code>--soft</code> — "I committed too soon" — keeps everything staged, ready to re-commit.</li>
+<li><code>--mixed</code> — "I want to redo from staging" — keeps the changes but unstages them.</li>
+<li><code>--hard</code> — "I want this never to have happened" — <strong>changes are gone</strong>.</li>
+</ul>
+<p><code>--hard</code> is destructive. Always check <code>git status</code> first to make sure you don't have uncommitted work you care about.</p>
+<h2 id="65-reverting-commits">6.5 Reverting Commits</h2>
+<p>If the commit has been pushed, <strong>revert</strong> instead of reset. Revert creates a <em>new</em> commit that undoes a previous one — no history rewrite.</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>revert<span class="w"> </span>a3f1b9c<span class="w">              </span><span class="c1"># creates a new commit undoing a3f1b9c</span>
+git<span class="w"> </span>revert<span class="w"> </span>HEAD<span class="w">                 </span><span class="c1"># undo the most recent commit</span>
+git<span class="w"> </span>revert<span class="w"> </span>--no-commit<span class="w"> </span>a3f1b9c<span class="w">  </span><span class="c1"># stage the inverse but don&#39;t commit (lets you combine)</span>
+</pre></div>
+
+<p>Result history:</p>
+<div class="highlight"><pre><span></span>*<span class="w"> </span>d9e0f1a<span class="w"> </span>Revert<span class="w"> </span><span class="s2">&quot;Add feature X&quot;</span>
+*<span class="w"> </span>a3f1b9c<span class="w"> </span>Add<span class="w"> </span>feature<span class="w"> </span>X
+*<span class="w"> </span>...
+</pre></div>
+
+<p>Both commits exist; readers see what was done and what was undone.</p>
+<h2 id="66-recovering-lost-commits">6.6 Recovering Lost Commits</h2>
+<p>You ran <code>git reset --hard</code> and lost commits. Don't panic. Git keeps a <strong>reflog</strong> — a record of where HEAD has been, even when the underlying commits are no longer in the visible history.</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>reflog
+<span class="c1"># a3f1b9c HEAD@{0}: reset: moving to HEAD~1</span>
+<span class="c1"># 9d2e7a4 HEAD@{1}: commit: Add feature</span>
+<span class="c1"># ...</span>
+</pre></div>
+
+<p>The commits still exist for ~90 days (default garbage collection interval). To get one back:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>9d2e7a4
+<span class="c1"># or, to bring it back as a branch:</span>
+git<span class="w"> </span>branch<span class="w"> </span>recovered<span class="w"> </span>9d2e7a4
+</pre></div>
+
+<p><strong><code>reflog</code> has saved my career multiple times.</strong> If you ever think you lost work, check the reflog before you panic.</p>
+<h2 id="67-amending-the-last-commit">6.7 Amending the Last Commit</h2>
+<p>You committed, then realized you forgot something:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Make your edit, then:</span>
+git<span class="w"> </span>add<span class="w"> </span>forgotten-file.txt
+git<span class="w"> </span>commit<span class="w"> </span>--amend
+<span class="c1"># Opens editor; edit message if you want, save, done.</span>
+
+<span class="c1"># Or amend without changing the message:</span>
+git<span class="w"> </span>commit<span class="w"> </span>--amend<span class="w"> </span>--no-edit
+</pre></div>
+
+<p>Amend creates a <em>new</em> commit replacing the previous one. So this rewrites history — safe locally, dangerous if pushed.</p>
+<h2 id="68-amending-an-earlier-commit">6.8 Amending an Earlier Commit</h2>
+<p>For anything older than HEAD, use <strong>interactive rebase</strong>:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~5
+</pre></div>
+
+<p>Git opens an editor with the last 5 commits:</p>
+<div class="highlight"><pre><span></span>pick<span class="w"> </span>a3f1b9c<span class="w"> </span>Add<span class="w"> </span>feature<span class="w"> </span>X
+pick<span class="w"> </span>9d2e7a4<span class="w"> </span>Fix<span class="w"> </span>typo
+pick<span class="w"> </span>7c1d2b8<span class="w"> </span>Refactor<span class="w"> </span>login
+pick<span class="w"> </span>0c1f8d3<span class="w"> </span>Add<span class="w"> </span>tests
+pick<span class="w"> </span>fe2ab1c<span class="w"> </span>Update<span class="w"> </span>docs
+</pre></div>
+
+<p>Change <code>pick</code> to <code>edit</code> next to the commit you want to modify:</p>
+<div class="highlight"><pre><span></span>edit<span class="w"> </span>a3f1b9c<span class="w"> </span>Add<span class="w"> </span>feature<span class="w"> </span>X
+pick<span class="w"> </span>9d2e7a4<span class="w"> </span>Fix<span class="w"> </span>typo
+...
+</pre></div>
+
+<p>Save and quit. Git replays commits up to that one, then pauses. You can now amend:</p>
+<div class="highlight"><pre><span></span><span class="c1"># make changes</span>
+git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>--amend
+git<span class="w"> </span>rebase<span class="w"> </span>--continue
+</pre></div>
+
+<p>Git replays the rest of the commits on top of your changes.</p>
+<h2 id="69-dropping-commits">6.9 Dropping Commits</h2>
+<p>Same setup as 6.8 — <code>git rebase -i HEAD~5</code>. Change <code>pick</code> to <code>drop</code> (or just delete the whole line):</p>
+<div class="highlight"><pre><span></span>pick<span class="w"> </span>a3f1b9c<span class="w"> </span>Add<span class="w"> </span>feature<span class="w"> </span>X
+drop<span class="w"> </span>9d2e7a4<span class="w"> </span>Fix<span class="w"> </span>typo
+pick<span class="w"> </span>7c1d2b8<span class="w"> </span>Refactor<span class="w"> </span>login
+</pre></div>
+
+<p>The dropped commit is removed. Subsequent commits are replayed without it — which may cause conflicts if they depended on the dropped change.</p>
+<h2 id="610-rewording-commit-messages">6.10 Rewording Commit Messages</h2>
+<p>Change <code>pick</code> to <code>reword</code>:</p>
+<div class="highlight"><pre><span></span>reword<span class="w"> </span>a3f1b9c<span class="w"> </span>Add<span class="w"> </span>feature<span class="w"> </span>X
+pick<span class="w"> </span>9d2e7a4<span class="w"> </span>Fix<span class="w"> </span>typo
+</pre></div>
+
+<p>Git pauses on each <code>reword</code> to let you edit the message.</p>
+<h2 id="611-reordering-commits">6.11 Reordering Commits</h2>
+<p>In the interactive rebase editor, just rearrange the lines. Git replays in the new order.</p>
+<div class="highlight"><pre><span></span>pick<span class="w"> </span>7c1d2b8<span class="w"> </span>Refactor<span class="w"> </span>login
+pick<span class="w"> </span>a3f1b9c<span class="w"> </span>Add<span class="w"> </span>feature<span class="w"> </span>X
+pick<span class="w"> </span>9d2e7a4<span class="w"> </span>Fix<span class="w"> </span>typo
+</pre></div>
+
+<p>Beware: reordering commits that touch the same lines often causes conflicts. Tools like <code>git mergetool</code> help.</p>
+<h2 id="612-squashing-commits">6.12 Squashing Commits</h2>
+<p>Combine multiple commits into one. Change <code>pick</code> to <code>squash</code> (or <code>s</code>):</p>
+<div class="highlight"><pre><span></span>pick<span class="w"> </span>a3f1b9c<span class="w"> </span>Add<span class="w"> </span>feature<span class="w"> </span>X
+squash<span class="w"> </span>9d2e7a4<span class="w"> </span>WIP
+squash<span class="w"> </span>7c1d2b8<span class="w"> </span>fix
+squash<span class="w"> </span>0c1f8d3<span class="w"> </span>more<span class="w"> </span>fixes
+</pre></div>
+
+<p>This squashes the bottom three into the first. Git opens an editor combining all the commit messages so you can write a single coherent one.</p>
+<p>Use <code>fixup</code> (or <code>f</code>) instead of <code>squash</code> to discard the squashed commits' messages and keep just the first one's.</p>
+<p>This is the cleanup move for "10 WIP commits → 1 clean commit before opening a PR".</p>
+<h2 id="613-splitting-a-commit">6.13 Splitting a Commit</h2>
+<p>Same rebase setup. Mark the commit as <code>edit</code>. When Git pauses:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>reset<span class="w"> </span>HEAD^<span class="w">               </span><span class="c1"># undo the commit but keep changes</span>
+<span class="c1"># Now stage piece by piece:</span>
+git<span class="w"> </span>add<span class="w"> </span>file1.txt
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;First logical change&quot;</span>
+git<span class="w"> </span>add<span class="w"> </span>file2.txt
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Second logical change&quot;</span>
+git<span class="w"> </span>rebase<span class="w"> </span>--continue
+</pre></div>
+
+<p>One commit became two — useful when a reviewer says "this PR does too much".</p>
+<h2 id="614-rewriting-history-a-worked-example">6.14 Rewriting History — A Worked Example</h2>
+<p>Starting messy history:</p>
+<div class="highlight"><pre><span></span>*<span class="w"> </span>a3f1b9c<span class="w"> </span>Update<span class="w"> </span>docs
+*<span class="w"> </span>9d2e7a4<span class="w"> </span>fix
+*<span class="w"> </span>7c1d2b8<span class="w"> </span>fix
+*<span class="w"> </span>0c1f8d3<span class="w"> </span>WIP
+*<span class="w"> </span>fe2ab1c<span class="w"> </span>Add<span class="w"> </span>login<span class="w"> </span>feature
+</pre></div>
+
+<p>We want:</p>
+<div class="highlight"><pre><span></span>*<span class="w"> </span>X<span class="w"> </span>Add<span class="w"> </span>login<span class="w"> </span>feature
+*<span class="w"> </span>Y<span class="w"> </span>Update<span class="w"> </span>docs
+</pre></div>
+
+<div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~5
+</pre></div>
+
+<p>Mark up:</p>
+<div class="highlight"><pre><span></span>pick<span class="w"> </span>fe2ab1c<span class="w"> </span>Add<span class="w"> </span>login<span class="w"> </span>feature
+fixup<span class="w"> </span>0c1f8d3<span class="w"> </span>WIP
+fixup<span class="w"> </span>7c1d2b8<span class="w"> </span>fix
+fixup<span class="w"> </span>9d2e7a4<span class="w"> </span>fix
+pick<span class="w"> </span>a3f1b9c<span class="w"> </span>Update<span class="w"> </span>docs
+</pre></div>
+
+<p>Save. Done. Clean history.</p>
+<p>If anything goes wrong:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>--abort
+</pre></div>
+
+<p>…and you're back to where you started. Always safe.</p>
+<h2 id="615-cheat-sheet-section-6">6.15 Cheat Sheet — Section 6</h2>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>reset<span class="w"> </span>--soft<span class="w"> </span>HEAD~1<span class="w">            </span><span class="c1"># undo commit, keep staged</span>
+git<span class="w"> </span>reset<span class="w"> </span>--mixed<span class="w"> </span>HEAD~1<span class="w">           </span><span class="c1"># undo commit, unstage (default)</span>
+git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1<span class="w">            </span><span class="c1"># undo commit, lose changes (DANGER)</span>
+git<span class="w"> </span>revert<span class="w"> </span>&lt;hash&gt;<span class="w">                  </span><span class="c1"># undo via new commit (safe)</span>
+git<span class="w"> </span>commit<span class="w"> </span>--amend<span class="w">                 </span><span class="c1"># edit last commit</span>
+git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~N<span class="w">               </span><span class="c1"># interactive rebase last N commits</span>
+<span class="c1">#   in the editor: pick / reword / edit / squash / fixup / drop</span>
+git<span class="w"> </span>rebase<span class="w"> </span>--continue<span class="w">              </span><span class="c1"># resume after fixing</span>
+git<span class="w"> </span>rebase<span class="w"> </span>--abort<span class="w">                 </span><span class="c1"># bail out</span>
+git<span class="w"> </span>reflog<span class="w">                         </span><span class="c1"># recovery log of all HEAD movements</span>
+</pre></div>
+
+<hr /><div class="section-footer">  <button class="btn-next" data-next="section-6">Start: Capstone Project: Run a Real Git Workflow →</button></div></section>
+<section class="course-section" id="section-6" data-section-id="section-6"><div class="section-header-meta">  <span class="section-tag">SECTION 7</span>  <button class="btn-complete" data-complete="section-6"><span class="check">○</span> Mark complete</button></div><h1 class="section-title">Capstone Project: Run a Real Git Workflow</h1><p>You've learned snapshots, history, branching, collaboration, and rewriting history. Now you'll put all of it together in a single, realistic workflow — the kind you'll run every day as a professional developer. This capstone isn't a program you build; it's a <strong>workflow you perform</strong>, start to finish, exactly as you would on a real team.</p>
+<p>Unlike the other courses' capstones, the "artifact" here is your <em>demonstrated ability</em> — a GitHub repository whose commit history and pull requests show you can work like a professional. That history is genuinely something to show an employer: it proves you understand branching, code review, conflict resolution, and clean history — the things that separate someone who "knows some Git commands" from someone who can work on a team.</p>
+<h2 id="71-what-youre-doing">7.1 What You're Doing</h2>
+<p>You'll simulate the full lifecycle of a small feature on a team project:</p>
+<ol>
+<li>Create a repository and push it to GitHub.</li>
+<li>Set up a <code>main</code> branch with an initial project.</li>
+<li>Work on <strong>two feature branches</strong> — as if you were two different developers.</li>
+<li>Open <strong>pull requests</strong> for each.</li>
+<li>Deliberately create a <strong>merge conflict</strong> and resolve it.</li>
+<li>Use <strong>interactive rebase</strong> to clean up messy commits before merging.</li>
+<li>Merge everything cleanly and tag a release.</li>
+</ol>
+<p>By the end, your repo's history and PR list look like real professional work. You'll have exercised every important Git skill in a realistic sequence.</p>
+<h3>Why this makes a good portfolio piece</h3>
+<ul>
+<li><strong>Recruiters and engineers look at your GitHub.</strong> A repo with clean commits, meaningful messages, real branches, and resolved PRs signals competence immediately.</li>
+<li><strong>It demonstrates workflow, not just commands.</strong> Anyone can memorize <code>git commit</code>. Showing you can run a branch-based workflow with code review and conflict resolution is what teams actually need.</li>
+<li><strong>Conflict resolution is a fear-point for beginners.</strong> Demonstrating you can handle it confidently sets you apart.</li>
+</ul>
+<h2 id="72-the-scenario">7.2 The Scenario</h2>
+<p>You're building a simple project — let's use a small "quotes" collection (a text file or tiny script; the content barely matters, the <em>workflow</em> is the point). You'll play two roles:</p>
+<ul>
+<li><strong>Developer A</strong>, adding a "quote of the day" feature.</li>
+<li><strong>Developer B</strong>, adding an "author index" feature.</li>
+</ul>
+<p>Both developers touch the same file, which is what creates the realistic conflict you'll resolve.</p>
+<p>You can do this entirely solo — you're just switching branches to simulate two people. On a real team, these would be two colleagues, but the Git mechanics are identical.</p>
+<h2 id="73-the-full-workflow-step-by-step">7.3 The Full Workflow — Step by Step</h2>
+<p>Work through these in order. Type every command yourself; don't copy-paste blindly — the point is to build muscle memory.</p>
+<h3>Part 1 — Set up the project</h3>
+<div class="highlight"><pre><span></span>mkdir<span class="w"> </span>quotes-project<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>quotes-project
+git<span class="w"> </span>init
+</pre></div>
+
+<p>Create a starting file, <code>quotes.md</code>:</p>
+<div class="highlight"><pre><span></span><span class="gh"># Famous Quotes</span>
+
+<span class="k">1.</span> &quot;The only way to do great work is to love what you do.&quot; — Steve Jobs
+<span class="k">2.</span> &quot;Simplicity is the ultimate sophistication.&quot; — Leonardo da Vinci
+</pre></div>
+
+<p>Commit it:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>quotes.md
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit: add quotes collection&quot;</span>
+</pre></div>
+
+<p>Create a repository on GitHub (empty, no README), then connect and push:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://github.com/YOUR-USERNAME/quotes-project.git
+git<span class="w"> </span>branch<span class="w"> </span>-M<span class="w"> </span>main
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+
+<p>You now have a project on <code>main</code>, on GitHub. This is your starting point.</p>
+<h3>Part 2 — Developer A's feature branch</h3>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>feature/quote-of-the-day
+</pre></div>
+
+<p>Add a new section to <code>quotes.md</code> — a "Quote of the Day" heading at the top:</p>
+<div class="highlight"><pre><span></span><span class="gh"># Famous Quotes</span>
+
+<span class="gu">## Quote of the Day</span>
+<span class="k">&gt; </span><span class="ge">&quot;The only way to do great work is to love what you do.&quot; — Steve Jobs</span>
+
+<span class="k">1.</span> &quot;The only way to do great work is to love what you do.&quot; — Steve Jobs
+<span class="k">2.</span> &quot;Simplicity is the ultimate sophistication.&quot; — Leonardo da Vinci
+</pre></div>
+
+<p>Commit it — but deliberately make <strong>two messy commits</strong>, so you can clean them up later with rebase:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>quotes.md
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;add qotd&quot;</span>
+<span class="c1"># make a tiny follow-up edit (fix a typo, adjust formatting)</span>
+git<span class="w"> </span>add<span class="w"> </span>quotes.md
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix&quot;</span>
+</pre></div>
+
+<p>Push the branch:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature/quote-of-the-day
+</pre></div>
+
+<h3>Part 3 — Clean up commits with interactive rebase</h3>
+<p>Those two commits (<code>add qotd</code> and <code>fix</code>) are messy. A professional squashes them into one clean commit before merging. This is where interactive rebase (Section 6) pays off:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>main
+</pre></div>
+
+<p>In the editor, squash the second commit into the first, and rewrite the message to something clear:</p>
+<div class="highlight"><pre><span></span>Add<span class="w"> </span><span class="s2">&quot;Quote of the Day&quot;</span><span class="w"> </span>section<span class="w"> </span>to<span class="w"> </span>quotes<span class="w"> </span>collection
+</pre></div>
+
+<p>Force-push the cleaned-up branch (safely — it's your own feature branch):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
+</pre></div>
+
+<p>Your feature branch now has one clean, well-described commit instead of two sloppy ones. This is exactly the discipline teams expect.</p>
+<h3>Part 4 — Open a pull request</h3>
+<p>On GitHub, open a <strong>pull request</strong> from <code>feature/quote-of-the-day</code> into <code>main</code>. Write a real description: what the change does, why. Then merge it (on a real team, a colleague would review first).</p>
+<p>After merging, update your local main:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+
+<h3>Part 5 — Developer B's feature branch (and the conflict)</h3>
+<p>Now play Developer B. Branch from the <em>current</em> main:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>feature/author-index
+</pre></div>
+
+<p>Add an "Authors" section — but put it in the <strong>same top area</strong> of <code>quotes.md</code> that Developer A modified. This is what creates the conflict:</p>
+<div class="highlight"><pre><span></span><span class="gh"># Famous Quotes</span>
+
+<span class="gu">## Authors Featured</span>
+<span class="k">-</span><span class="w"> </span>Steve Jobs
+<span class="k">-</span><span class="w"> </span>Leonardo da Vinci
+
+<span class="gu">## Quote of the Day</span>
+<span class="k">&gt; </span><span class="ge">&quot;The only way to do great work is to love what you do.&quot; — Steve Jobs</span>
+
+<span class="k">1.</span> &quot;The only way to do great work is to love what you do.&quot; — Steve Jobs
+<span class="k">2.</span> &quot;Simplicity is the ultimate sophistication.&quot; — Leonardo da Vinci
+</pre></div>
+
+<p>Commit and push:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>quotes.md
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add authors featured section&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature/author-index
+</pre></div>
+
+<h3>Part 6 — Create and resolve a conflict</h3>
+<p>Here's the realistic part. While Developer B was working, imagine <code>main</code> changed underneath them. Simulate that: switch to main and make a conflicting change directly (in reality this would be someone else's merged PR):</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>main
+</pre></div>
+
+<p>Edit <code>quotes.md</code> — change the Quote of the Day to a different quote:</p>
+<div class="highlight"><pre><span></span><span class="gu">## Quote of the Day</span>
+<span class="k">&gt; </span><span class="ge">&quot;Simplicity is the ultimate sophistication.&quot; — Leonardo da Vinci</span>
+</pre></div>
+
+<p>Commit it:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>quotes.md
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Update quote of the day&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+
+<p>Now Developer B's branch is based on old main, and both changed the same area. Rebase B's branch onto the updated main:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>feature/author-index
+git<span class="w"> </span>rebase<span class="w"> </span>main
+</pre></div>
+
+<p>Git stops with a <strong>conflict</strong>. Open <code>quotes.md</code> — you'll see the conflict markers:</p>
+<div class="highlight"><pre><span></span><span class="o">&lt;&lt;&lt;&lt;&lt;&lt;</span>&lt;<span class="w"> </span>HEAD
+<span class="c1">## Quote of the Day</span>
+&gt;<span class="w"> </span><span class="s2">&quot;Simplicity is the ultimate sophistication.&quot;</span><span class="w"> </span>—<span class="w"> </span>Leonardo<span class="w"> </span>da<span class="w"> </span><span class="nv">Vinci</span>
+<span class="o">=======</span>
+<span class="c1">## Quote of the Day</span>
+&gt;<span class="w"> </span><span class="s2">&quot;The only way to do great work is to love what you do.&quot;</span><span class="w"> </span>—<span class="w"> </span>Steve<span class="w"> </span>Jobs
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;<span class="w"> </span>Add<span class="w"> </span>authors<span class="w"> </span>featured<span class="w"> </span>section
+</pre></div>
+
+<p>Resolve it by hand — decide what the correct combined result should be (keep the updated quote from main, keep your authors section), and delete the conflict markers. Then:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>quotes.md
+git<span class="w"> </span>rebase<span class="w"> </span>--continue
+</pre></div>
+
+<p>You just resolved a merge conflict during a rebase — the single most intimidating Git operation for beginners, and you did it. Push the rebased branch:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
+</pre></div>
+
+<h3>Part 7 — Merge and tag a release</h3>
+<p>Open a pull request for <code>feature/author-index</code>, review, and merge it on GitHub. Then update local main and tag a release:</p>
+<div class="highlight"><pre><span></span>git<span class="w"> </span>switch<span class="w"> </span>main
+git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v1.0.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;First release: quote of the day and author index&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v1.0.0
+</pre></div>
+
+<p>You now have a repository with:
+- A clean commit history.
+- Two merged feature branches via pull requests.
+- A resolved merge conflict in the history.
+- A tagged release.</p>
+<p>That's a professional Git workflow, start to finish.</p>
+<h2 id="74-what-each-step-demonstrated">7.4 What Each Step Demonstrated</h2>
+<p>Worth understanding, and worth explaining in an interview.</p>
+<p><strong>Feature branches (Parts 2, 5).</strong> Real teams never commit directly to <code>main</code>. Every change happens on a branch, gets reviewed, then merges. Demonstrating this shows you understand team workflow, not just solo hacking.</p>
+<p><strong>Interactive rebase to clean history (Part 3).</strong> The difference between <code>add qotd</code> / <code>fix</code> / <code>fix again</code> and one clear <code>Add "Quote of the Day" section</code> commit is the difference between an amateur and a professional history. Clean history makes debugging (Section 3's <code>git bisect</code>, <code>git blame</code>) actually work.</p>
+<p><strong><code>--force-with-lease</code> instead of <code>--force</code> (Parts 3, 6).</strong> After rebasing, you must force-push because history changed. <code>--force-with-lease</code> is the safe version — it refuses to overwrite if someone else pushed in the meantime, preventing you from clobbering a colleague's work. Using it shows you rewrite history <em>carefully</em>.</p>
+<p><strong>Pull requests (Parts 4, 7).</strong> The unit of code review. Even solo, using PRs builds the habit and produces a reviewable record of every change.</p>
+<p><strong>Conflict resolution during rebase (Part 6).</strong> This is the skill beginners fear most. Showing you can rebase onto updated main, resolve conflicts by hand, and continue — calmly — is a strong signal of real competence.</p>
+<p><strong>Tagging releases (Part 7).</strong> Marking versioned points in history. Shows you understand that software ships in versions.</p>
+<h2 id="75-make-it-yours-extensions">7.5 Make It Yours — Extensions</h2>
+<p>Once you've run the base workflow, deepen it:</p>
+<ul>
+<li><strong>Add a real <code>.gitignore</code></strong> and a <code>README.md</code> with a project description and a contribution guide.</li>
+<li><strong>Protect the main branch</strong> on GitHub (settings → branches) so direct pushes are blocked and PRs are required. Now you <em>must</em> use the workflow.</li>
+<li><strong>Use GitHub Issues</strong> — open an issue for each feature, reference it in your PR ("Closes #1"), and watch it auto-close on merge.</li>
+<li><strong>Try <code>git bisect</code></strong> — introduce a "bug" in one commit, then use bisect to find which commit introduced it (Section 3).</li>
+<li><strong>Cherry-pick</strong> — practice moving a single commit from one branch to another with <code>git cherry-pick</code>.</li>
+<li><strong>Contribute to a real open-source project.</strong> Find a beginner-friendly repo (look for "good first issue" labels), fork it, make a small fix, and open a real PR. This is the ultimate demonstration — an actual contribution to real software, visible on your GitHub profile forever.</li>
+</ul>
+<p>That last one is the real graduation. A merged pull request to a project you don't own is worth more than any tutorial. Employers love it.</p>
+<h2 id="76-documenting-it">7.6 Documenting It</h2>
+<p>Your repository <em>is</em> the portfolio piece here, so make it presentable:</p>
+<ul>
+<li>Write a clear <code>README.md</code> explaining what the project is and, crucially, noting that it demonstrates a professional Git workflow (feature branches, PRs, conflict resolution, clean history, tagged releases).</li>
+<li>Keep your commit messages clean and meaningful — they're on display.</li>
+<li>Pin the repo on your GitHub profile.</li>
+</ul>
+<p>When an employer looks at your GitHub and sees a repo with real branches, thoughtful PRs, a resolved conflict, and a clean history, they see someone who can drop into a team and work immediately. That's exactly the signal you want to send.</p>
+<p>That's your capstone. You ran a complete, professional Git workflow — the same sequence of operations you'll perform every day as a developer. You branched, reviewed, rebased, resolved a conflict, and shipped. That's not "knowing Git commands." That's working like a professional.</p>
+<h3>🏋️ Final Exercise</h3>
+<blockquote>
+<p>Run the entire workflow in 7.3 yourself, start to finish, on a real GitHub repository. Don't skip the conflict — that's the most valuable part. When you're done, add at least <strong>one</strong> extension from 7.5.</p>
+<p>Then, for the real challenge: find a beginner-friendly open-source project and open a genuine pull request. A single merged PR to a real project is the strongest Git portfolio evidence there is.</p>
+</blockquote>
+<hr /><div class="section-footer">  <button class="btn-next" data-next="section-7">Start: Course Conclusion →</button></div></section>
+<section class="course-section" id="section-7" data-section-id="section-7"><p>You've reached the end. Here's what you can now do:</p>
+<ol>
+<li><strong>Take snapshots</strong> of your work — commit deliberately, with good messages.</li>
+<li><strong>Browse history</strong> — log, diff, blame, bisect, find any change.</li>
+<li><strong>Branch fearlessly</strong> — try ideas in isolation, merge when ready.</li>
+<li><strong>Resolve conflicts</strong> without panic.</li>
+<li><strong>Collaborate via remotes</strong> — clone, pull, push, fork, PR.</li>
+<li><strong>Rewrite history</strong> when needed — and know when not to.</li>
+</ol>
+<h2 id="what-to-do-next">What to do next</h2>
+<ul>
+<li><strong>Use Git daily.</strong> This is muscle memory. Even on solo projects, commit, branch, merge.</li>
+<li><strong>Read other repos' histories.</strong> Open a project you like on GitHub, click "Commits", read the messages. You'll absorb conventions.</li>
+<li><strong>Set up SSH keys</strong> with GitHub if you haven't. Stop typing passwords/tokens.</li>
+<li><strong>Configure aliases</strong> for your most-used commands. Mine: <code>git lg</code> (graph log), <code>git st</code> (status short), <code>git unstage</code>.</li>
+<li><strong>Learn <code>git bisect</code>.</strong> Most developers never do, and it's the single highest-value command in the toolkit.</li>
+<li><strong>Look into hooks</strong> (<code>.git/hooks/</code>) — automatic scripts that run on commit/push. Powerful for code formatting and pre-push checks.</li>
+</ul>
+<h2 id="beyond-the-basics">Beyond the basics</h2>
+<ul>
+<li><strong>GitHub Actions / GitLab CI</strong> — automate tests, builds, deploys when you push.</li>
+<li><strong>Git internals</strong> — the book <em>Pro Git</em> (free at git-scm.com/book) has a "Git Internals" chapter that's genuinely illuminating. Once you understand that everything is a hash-named blob, tree, or commit, every command makes sense.</li>
+<li><strong>Conventional commits</strong> — a structured format (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>) that enables automated changelogs.</li>
+<li><strong>Trunk-based development</strong> vs <strong>Git Flow</strong> — two opposing branching strategies, both common. Read both, pick what fits your team.</li>
+</ul>
+<p>Good luck. Git is one of those tools where every hour invested pays for itself a hundred times over.</p>
+<hr />
+<p><em>End of course. Total: 6 sections. All explanations, examples, and exercises are original.</em></p></section>
+</main>
+</div>
+
+<div class="search-overlay" id="search-overlay">
+  <div class="search-modal">
+    <input type="text" class="search-input" id="search-input" placeholder="Search the course... (e.g. 'flexbox', 'grid', 'cascade')" autocomplete="off">
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
+<script>
+// Legacy-browser safe: no async/await, no optional chaining, safe localStorage
+var STORAGE_KEY = 'git_mastery_progress';
+var THEME_KEY = 'git_mastery_theme';
+var LAST_SECTION_KEY = 'git_mastery_last';
+var TOTAL_SECTIONS = 7;
+
+function safeGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+function safeSet(key, value) { try { localStorage.setItem(key, value); } catch (e) { /* ignore */ } }
+
+var initialCompleted = [];
+try { initialCompleted = JSON.parse(safeGet(STORAGE_KEY) || '[]'); } catch (e) { initialCompleted = []; }
+
+var state = { completed: new Set(initialCompleted), currentSection: 'intro' };
+var allSectionIds = Array.from(document.querySelectorAll('.course-section')).map(function(s) { return s.dataset.sectionId; });
+
+var savedTheme = safeGet(THEME_KEY) || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+document.getElementById('theme-toggle').addEventListener('click', function() {
+  var cur = document.documentElement.getAttribute('data-theme');
+  var next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  safeSet(THEME_KEY, next);
+});
+
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'copy';
+  btn.addEventListener('click', function() {
+    var code = pre.querySelector('code').innerText;
+    var ok = false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code);
+        ok = true;
+      }
+    } catch (e) { ok = false; }
+    if (!ok) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = code;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        ok = true;
+      } catch (e2) { ok = false; }
+    }
+    btn.textContent = ok ? 'copied!' : 'failed';
+    if (ok) btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'copy';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+  pre.appendChild(btn);
+});
+
+function showSection(id, push) {
+  if (typeof push === 'undefined') push = true;
+  document.querySelectorAll('.course-section').forEach(function(s) { s.classList.remove('visible'); });
+  var target = document.querySelector('[data-section-id="' + id + '"]');
+  if (!target) return;
+  target.classList.add('visible');
+  state.currentSection = id;
+  safeSet(LAST_SECTION_KEY, id);
+  document.querySelectorAll('.nav-item').forEach(function(n) {
+    n.classList.toggle('active', n.dataset.section === id);
+  });
+  window.scrollTo(0, 0);
+  if (push) {
+    try { history.replaceState(null, '', '#' + (id === 'intro' ? 'intro' : id)); } catch (e) {}
+  }
+  closeSidebar();
+}
+
+document.querySelectorAll('.nav-item').forEach(function(item) {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    showSection(item.dataset.section);
+  });
+});
+
+document.addEventListener('click', function(e) {
+  var t = e.target;
+  while (t && t !== document.body) {
+    if (t.dataset && t.dataset.next) { showSection(t.dataset.next); return; }
+    if (t.dataset && t.dataset.prev) { showSection(t.dataset.prev); return; }
+    t = t.parentNode;
+  }
+});
+
+function renderCompletion() {
+  document.querySelectorAll('[data-complete]').forEach(function(btn) {
+    var id = btn.dataset.complete;
+    var done = state.completed.has(id);
+    btn.classList.toggle('done', done);
+    btn.innerHTML = '<span class="check">' + (done ? '●' : '○') + '</span> ' + (done ? 'Completed' : 'Mark complete');
+  });
+  document.querySelectorAll('.nav-item').forEach(function(item) {
+    item.classList.toggle('completed', state.completed.has(item.dataset.section));
+  });
+  var doneCount = 0;
+  state.completed.forEach(function(id) {
+    var m = id.match(/^section-(\d+)$/);
+    if (m && parseInt(m[1]) < TOTAL_SECTIONS) doneCount++;
+  });
+  var pct = (doneCount / TOTAL_SECTIONS) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = doneCount + ' of ' + TOTAL_SECTIONS + ' complete';
+}
+
+document.addEventListener('click', function(e) {
+  var t = e.target;
+  while (t && t !== document.body) {
+    if (t.dataset && t.dataset.complete) {
+      var id = t.dataset.complete;
+      if (state.completed.has(id)) state.completed.delete(id);
+      else state.completed.add(id);
+      safeSet(STORAGE_KEY, JSON.stringify(Array.from(state.completed)));
+      renderCompletion();
+      return;
+    }
+    t = t.parentNode;
+  }
+});
+
+window.addEventListener('scroll', function() {
+  var winH = window.innerHeight;
+  var docH = document.documentElement.scrollHeight - winH;
+  var pct = Math.min(100, (window.scrollY / docH) * 100);
+  document.getElementById('reading-progress').style.width = pct + '%';
+});
+
+var overlay = document.getElementById('search-overlay');
+var searchInput = document.getElementById('search-input');
+var searchResults = document.getElementById('search-results');
+var searchIndex = [];
+
+document.querySelectorAll('.course-section').forEach(function(section) {
+  var sectionId = section.dataset.sectionId;
+  var h1 = section.querySelector('h1');
+  var sectionTitle = (h1 && h1.innerText) || 'Overview';
+  searchIndex.push({ title: sectionTitle, section: sectionId, anchor: sectionId, sectionTitle: sectionTitle });
+  section.querySelectorAll('h2').forEach(function(h) {
+    searchIndex.push({ title: h.innerText, section: sectionId, anchor: h.id, sectionTitle: sectionTitle });
+  });
+  section.querySelectorAll('h3').forEach(function(h) {
+    searchIndex.push({ title: h.innerText, section: sectionId, anchor: h.id || '', sectionTitle: sectionTitle });
+  });
+});
+
+function openSearch() {
+  overlay.classList.add('visible');
+  searchInput.value = '';
+  renderSearch('');
+  setTimeout(function() { searchInput.focus(); }, 50);
+}
+function closeSearch() { overlay.classList.remove('visible'); }
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, function(c) {
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+  });
+}
+
+function renderSearch(query) {
+  var q = query.toLowerCase().trim();
+  if (!q) { searchResults.innerHTML = '<div class="search-empty">Type to search section titles and topics</div>'; return; }
+  var matches = searchIndex.filter(function(item) { return item.title.toLowerCase().indexOf(q) !== -1; }).slice(0, 20);
+  if (matches.length === 0) { searchResults.innerHTML = '<div class="search-empty">No matches</div>'; return; }
+  var html = '';
+  matches.forEach(function(m, i) {
+    html += '<div class="search-result ' + (i === 0 ? 'highlighted' : '') + '" data-section="' + m.section + '" data-anchor="' + m.anchor + '">';
+    html += '<div class="search-result-title">' + escapeHtml(m.title) + '</div>';
+    html += '<div class="search-result-section">' + escapeHtml(m.sectionTitle) + '</div>';
+    html += '</div>';
+  });
+  searchResults.innerHTML = html;
+  searchResults.querySelectorAll('.search-result').forEach(function(el) {
+    el.addEventListener('click', function() {
+      showSection(el.dataset.section);
+      if (el.dataset.anchor && el.dataset.anchor !== el.dataset.section) {
+        setTimeout(function() {
+          var target = document.getElementById(el.dataset.anchor);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+      closeSearch();
+    });
+  });
+}
+
+searchInput.addEventListener('input', function(e) { renderSearch(e.target.value); });
+searchInput.addEventListener('keydown', function(e) {
+  var cur = searchResults.querySelector('.search-result.highlighted');
+  if (e.key === 'Escape') { closeSearch(); }
+  else if (e.key === 'Enter' && cur) { cur.click(); }
+  else if (e.key === 'ArrowDown' && cur) {
+    e.preventDefault();
+    var next = cur.nextElementSibling;
+    if (next) { cur.classList.remove('highlighted'); next.classList.add('highlighted'); next.scrollIntoView({block:'nearest'}); }
+  } else if (e.key === 'ArrowUp' && cur) {
+    e.preventDefault();
+    var prev = cur.previousElementSibling;
+    if (prev) { cur.classList.remove('highlighted'); prev.classList.add('highlighted'); prev.scrollIntoView({block:'nearest'}); }
+  }
+});
+overlay.addEventListener('click', function(e) { if (e.target === overlay) closeSearch(); });
+document.getElementById('search-btn').addEventListener('click', openSearch);
+
+document.addEventListener('keydown', function(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); return; }
+  if (e.key === 'Escape' && overlay.classList.contains('visible')) { closeSearch(); return; }
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (overlay.classList.contains('visible')) return;
+  var idx = allSectionIds.indexOf(state.currentSection);
+  if (e.key === 'ArrowRight' && idx < allSectionIds.length - 1) showSection(allSectionIds[idx + 1]);
+  else if (e.key === 'ArrowLeft' && idx > 0) showSection(allSectionIds[idx - 1]);
+});
+
+var sidebar = document.getElementById('sidebar');
+var backdrop = document.getElementById('backdrop');
+function openSidebar() { sidebar.classList.add('open'); backdrop.classList.add('visible'); }
+function closeSidebar() { sidebar.classList.remove('open'); backdrop.classList.remove('visible'); }
+document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+  if (sidebar.classList.contains('open')) closeSidebar(); else openSidebar();
+});
+backdrop.addEventListener('click', closeSidebar);
+
+var hash = location.hash.slice(1);
+var lastSection = hash || safeGet(LAST_SECTION_KEY) || 'intro';
+var startSection = allSectionIds.indexOf(lastSection) !== -1 ? lastSection : 'intro';
+showSection(startSection, false);
+renderCompletion();
+</script>
+</body>
+</html>

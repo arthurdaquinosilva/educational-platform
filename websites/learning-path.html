@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Learning Path — From Zero to Hired</title>
+<style>
+  :root {
+    --bg: #0b0d10; --panel: #14171c; --panel-2: #1b1f26;
+    --ink: #e7e9ee; --muted: #9aa3b2; --line: #262b34;
+    --accent: #7dd3fc; --accent-ink: #0369a1;
+    --sql: #f87171; --git: #f78166; --html: #7aa7ff; --css: #5eead4;
+    --found: #a78bfa; --js: #fbbf24; --sys: #7dd3fc; --ai: #34d399;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.6; padding: 0 20px 80px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  header { padding: 64px 0 40px; text-align: center; }
+  .brand {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    color: var(--accent); font-size: 0.95rem; letter-spacing: 0.02em;
+    margin-bottom: 20px;
+  }
+  .brand b { color: var(--ink); }
+  h1 { font-size: 2.4rem; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px; }
+  h1 span { color: var(--accent); }
+  .tagline { color: var(--muted); font-size: 1.1rem; max-width: 620px; margin: 0 auto; }
+  .intro {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 24px 28px; margin: 8px 0 48px;
+  }
+  .intro p { margin-bottom: 12px; }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro strong { color: var(--ink); }
+  .stage-label {
+    font-family: ui-monospace, monospace; font-size: 0.8rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin: 40px 0 4px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .stage-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .course {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--panel); border: 1px solid var(--line);
+    border-left: 4px solid var(--c, var(--accent));
+    border-radius: 12px; padding: 20px 24px; margin: 14px 0;
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+  }
+  .course:hover { transform: translateX(4px); background: var(--panel-2); }
+  .course-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .course-name { font-size: 1.2rem; font-weight: 650; letter-spacing: -0.01em; }
+  .course-name .num {
+    display: inline-block; width: 26px; color: var(--muted);
+    font-family: ui-monospace, monospace; font-size: 0.9rem;
+  }
+  .course-meta { font-size: 0.82rem; color: var(--muted); font-family: ui-monospace, monospace; }
+  .course-desc { color: var(--muted); margin: 10px 0 0 26px; font-size: 0.96rem; }
+  .course-foot { margin: 12px 0 0 26px; font-size: 0.85rem; display: flex; gap: 18px; flex-wrap: wrap; }
+  .prereq { color: var(--muted); }
+  .prereq b { color: var(--ink); font-weight: 600; }
+  .builds { color: var(--c, var(--accent)); }
+  .builds b { font-weight: 600; }
+  .parallel {
+    text-align: center; color: var(--muted); font-size: 0.82rem;
+    font-family: ui-monospace, monospace; margin: 6px 0; letter-spacing: 0.04em;
+  }
+  .after {
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px 30px; margin-top: 56px;
+  }
+  .after h2 { font-size: 1.4rem; margin-bottom: 14px; letter-spacing: -0.02em; }
+  .after ul { list-style: none; }
+  .after li { padding: 8px 0 8px 26px; position: relative; color: var(--muted); }
+  .after li::before { content: "\2192"; position: absolute; left: 0; color: var(--accent); }
+  .after li b { color: var(--ink); font-weight: 600; }
+  footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 56px; }
+  footer a { color: var(--accent); text-decoration: none; }
+  .free-badge {
+    display: inline-block; background: rgba(52,211,153,0.12); color: #34d399;
+    border: 1px solid rgba(52,211,153,0.3); border-radius: 999px;
+    padding: 2px 12px; font-size: 0.8rem; font-family: ui-monospace, monospace;
+    margin-top: 18px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">$ <b>the.curriculum</b></div>
+    <h1>From <span>Zero</span> to <span>Hired</span></h1>
+    <p class="tagline">A complete, self-study path into software engineering. Eight courses, built to be worked in order, each ending in a real project for your portfolio.</p>
+    <div class="free-badge">Free &amp; open source — forever</div>
+  </header>
+
+  <div class="intro">
+    <p>This is a <strong>learning path</strong>, not a random pile of courses. Each one assumes what came before it and sets up what comes next. Worked in order, they take you from "I've never written a line of code" to "I can build real software and talk about it like an engineer."</p>
+    <p>Every course ends with a <strong>capstone project</strong> — something you build, deploy, and put on your GitHub. By the end you don't just <em>know</em> things; you have a portfolio that <em>shows</em> you know them. That's what gets interviews.</p>
+    <p>Take your time. Do the exercises. Build the projects for real — don't just read the solutions. The people who finish this path and build every project will be genuinely employable.</p>
+  </div>
+
+  <div class="stage-label">Stage 1 &middot; Foundations</div>
+
+  <a class="course" href="foundations_mastery.html" style="--c: var(--found)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">01</span>Programming Foundations</div>
+      <div class="course-meta">18 sections &middot; Python</div>
+    </div>
+    <p class="course-desc">The absolute beginning. Variables, logic, loops, functions, data structures, algorithmic thinking, and how computers actually work. Taught in Python, but the concepts are universal.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> none — start here</span>
+      <span class="builds"><b>Capstone:</b> a command-line expense tracker</span>
+    </div>
+  </a>
+
+  <div class="stage-label">Stage 2 &middot; The Web &amp; Tools</div>
+
+  <a class="course" href="git_mastery.html" style="--c: var(--git)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">02</span>Git Mastery</div>
+      <div class="course-meta">7 sections &middot; Git &amp; GitHub</div>
+    </div>
+    <p class="course-desc">Version control, the tool every developer uses every day. Snapshots, branching, collaboration, and rewriting history — up to a full professional team workflow.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> Foundations (helpful, not required)</span>
+      <span class="builds"><b>Capstone:</b> run a real feature-branch workflow with PRs &amp; conflict resolution</span>
+    </div>
+  </a>
+
+  <a class="course" href="html_mastery.html" style="--c: var(--html)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">03</span>HTML Mastery</div>
+      <div class="course-meta">11 sections &middot; HTML</div>
+    </div>
+    <p class="course-desc">The structure of every web page. Semantic markup, forms, tables, media, and accessibility — the foundation everything visual on the web is built on.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> none</span>
+      <span class="builds"><b>Capstone:</b> a multi-page semantic, accessible website</span>
+    </div>
+  </a>
+
+  <a class="course" href="css_mastery.html" style="--c: var(--css)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">04</span>CSS Mastery</div>
+      <div class="course-meta">13 sections &middot; CSS</div>
+    </div>
+    <p class="course-desc">Making the web beautiful. The box model, flexbox, grid, responsive design, animations, and modern CSS — with 33 live, editable demos. Style the very site you built in HTML.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> HTML Mastery</span>
+      <span class="builds"><b>Capstone:</b> three-era responsive layout project</span>
+    </div>
+  </a>
+
+  <div class="stage-label">Stage 3 &middot; Programming for Real</div>
+
+  <a class="course" href="js_mastery.html" style="--c: var(--js)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">05</span>JavaScript Mastery</div>
+      <div class="course-meta">20 sections &middot; JavaScript</div>
+    </div>
+    <p class="course-desc">The language of the web. From fundamentals through async, the DOM, modern JavaScript, and Node — everything you need to make websites interactive and build back-ends.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> Foundations, HTML, CSS</span>
+      <span class="builds"><b>Capstone:</b> TaskFlow — a drag-and-drop Kanban app</span>
+    </div>
+  </a>
+
+  <a class="course" href="sql_mastery.html" style="--c: var(--sql)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">06</span>SQL Mastery</div>
+      <div class="course-meta">15 sections &middot; SQL</div>
+    </div>
+    <p class="course-desc">How real applications store data. Queries, joins, design, indexes, transactions — the database skills every back-end developer needs.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> Foundations</span>
+      <span class="builds"><b>Capstone:</b> design &amp; query a real relational database</span>
+    </div>
+  </a>
+
+  <div class="parallel">&updownarrow; courses 05 and 06 can be taken in either order &updownarrow;</div>
+
+  <div class="stage-label">Stage 4 &middot; Engineering at Scale</div>
+
+  <a class="course" href="system_mastery.html" style="--c: var(--sys)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">07</span>System Design Mastery</div>
+      <div class="course-meta">22 sections &middot; Architecture</div>
+    </div>
+    <p class="course-desc">How large systems are built. Scaling, databases, caching, queues, and eleven real case studies (URL shortener, chat, news feed, ride-sharing, and more). The senior-engineer skillset.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> JavaScript &amp; SQL (build real apps first)</span>
+      <span class="builds"><b>Capstone:</b> write professional system design documents</span>
+    </div>
+  </a>
+
+  <a class="course" href="ai_mastery.html" style="--c: var(--ai)">
+    <div class="course-top">
+      <div class="course-name"><span class="num">08</span>AI Engineering Mastery</div>
+      <div class="course-meta">18 sections &middot; AI / LLMs</div>
+    </div>
+    <p class="course-desc">Building software with AI. Prompt engineering, LLM APIs, RAG, vector databases, MCP, agents, evaluation, and cost — the practical skills companies are hiring for right now.</p>
+    <div class="course-foot">
+      <span class="prereq"><b>Prerequisites:</b> JavaScript (Python examples — Foundations is enough)</span>
+      <span class="builds"><b>Capstone:</b> a personal knowledge assistant (RAG app)</span>
+    </div>
+  </a>
+
+  <div class="after">
+    <h2>After you finish</h2>
+    <p style="color:var(--muted); margin-bottom:12px;">You'll have eight courses' worth of knowledge and a portfolio of real, deployed projects. To turn that into a job:</p>
+    <ul>
+      <li><b>Deploy every capstone.</b> A live URL beats a description every time. Put them on GitHub with clean READMEs.</li>
+      <li><b>Pick a specialty.</b> Frontend (React/TypeScript), back-end (APIs, databases), or AI engineering — go deeper in one direction.</li>
+      <li><b>Contribute to open source.</b> One merged pull request to a real project is worth more than any certificate.</li>
+      <li><b>Build one bigger thing.</b> Combine your skills into a single full-stack project you're proud of — that's your headline portfolio piece.</li>
+      <li><b>Practice interviewing.</b> The System Design course prepared you for design interviews; practice coding problems alongside.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>Free and open source, forever. If these courses helped you, consider supporting the project — entirely optional, only if you want to.</p>
+    <p style="margin-top:10px;">Built with care, so you can learn without paying a cent.</p>
+  </footer>
+
+</div>
+</body>
+</html>
