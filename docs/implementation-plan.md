@@ -101,16 +101,14 @@ file as early as possible. Everything after that is widening, not proving.
 
 ### A.5 — Deploy to GitHub Pages
 
-- [~] **Task.** GitHub Actions workflow: install → lint → test → build → deploy.
-  `basePath` handled so assets resolve on Pages. Draft `deployment.md`.
+- [x] **Task.** GitHub Actions workflow: install → lint → test → build → deploy.
+      `basePath` handled so assets resolve on Pages. Draft `deployment.md`.
 - **Depends on:** A.4
 - **Done when:** the walking skeleton is reachable at its public URL and a push
   to `main` redeploys it with no manual steps.
-- **Status.** Workflow (`.github/workflows/deploy.yml`) and `deployment.md`
-  landed in b785ede. The site ships `noindex` until launch (the pipeline is
-  decoupled from the public launch — see `config/site.ts`). **Blocked on the
-  one-time repo setting** — Settings → Pages → Source: _GitHub Actions_ — after
-  which the next push to `main` deploys and the done-when can be verified.
+- **Status.** Live and verified. Run 29377135362 deployed green; the lesson URL
+  returns 200 with assets resolving under `/educational-platform/`, and every
+  page carries `noindex` until launch. Push-to-`main` auto-deploy confirmed.
 
 ---
 
